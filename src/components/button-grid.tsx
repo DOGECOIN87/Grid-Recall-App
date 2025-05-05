@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -82,11 +81,40 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
       >
         {gridItems.map((index) => {
           const allSequenceNumbers = getSequenceNumbers(index); // All steps for this button up to currentStep
-          const latestTwelveSequenceNumbers = allSequenceNumbers.slice(-12); // Get the last 12 steps
           const variant = getButtonVariant(index);
           const isCurrent = sequence[currentStep - 1] === index && currentStep > 0;
           const sequenceString = allSequenceNumbers.join(', ');
-          const occupiedPositions = new Set<number>(); // Track occupied positions for this button
+
+          // Map to store final calculated positions for each step number on this button
+          // Key: positionIndex (0-11), Value: stepNumber
+          const occupiedPositions = new Map<number, number>();
+
+          // Calculate positions for ALL sequence numbers for this button
+          allSequenceNumbers.forEach((stepNumber) => {
+            const initialPositionIndex = (stepNumber - 1) % 12; // Calculate initial target position (0-11)
+            let finalPositionIndex = initialPositionIndex;
+            let attempts = 0;
+
+            // Find the next available position clockwise if the initial one is taken
+            while (occupiedPositions.has(finalPositionIndex) && attempts < 12) {
+              finalPositionIndex = (finalPositionIndex + 1) % 12;
+              attempts++;
+            }
+
+            // If a spot is found (or the initial was free), mark it as occupied by this stepNumber
+            if (attempts < 12) {
+                 occupiedPositions.set(finalPositionIndex, stepNumber);
+            } else {
+                // Fallback: If all 12 slots are filled (e.g., >12 presses on this button),
+                // log a warning. The current behavior might overwrite an existing number
+                // if we still call occupiedPositions.set(). For now, let's just log.
+                // A more robust solution might involve inner rings or scaling text.
+                console.warn(`Button ${index}: Could not find an empty slot for step ${stepNumber} after 12 attempts. Display overlap may occur.`);
+                // We can still attempt to place it, potentially overwriting
+                 occupiedPositions.set(finalPositionIndex, stepNumber);
+            }
+          });
+
 
           return (
             <Tooltip key={index}>
@@ -102,46 +130,20 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                   onClick={() => onButtonClick(index)}
                   aria-label={`Grid button ${index + 1}${allSequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
                 >
-                  {/* Display Latest 12 Step Numbers in Clock Positions, avoiding overlap */}
-                  {latestTwelveSequenceNumbers.map((stepNumber) => {
-                    const initialPositionIndex = (stepNumber - 1) % 12; // Calculate initial target position (0-11)
-                    let finalPositionIndex = initialPositionIndex;
-
-                    // Find the next available position clockwise if the initial one is taken
-                    let attempts = 0;
-                    while (occupiedPositions.has(finalPositionIndex) && attempts < 12) {
-                      finalPositionIndex = (finalPositionIndex + 1) % 12;
-                      attempts++;
-                    }
-
-                    // If after 12 attempts we couldn't find a spot (shouldn't happen with 12 slots),
-                    // we might fall back to the initial position or log an error.
-                    // For now, just use the finalPositionIndex found (or the initial if loop didn't run).
-                    if (attempts < 12) {
-                      occupiedPositions.add(finalPositionIndex); // Mark this position as occupied
-                    } else {
-                       // Fallback or error handling if needed, for now, we overwrite the initial
-                       finalPositionIndex = initialPositionIndex;
-                       if (!occupiedPositions.has(finalPositionIndex)) {
-                           occupiedPositions.add(finalPositionIndex);
-                       }
-                    }
-
-
-                    return (
-                      <span
+                  {/* Render Step Numbers based on calculated positions */}
+                  {Array.from(occupiedPositions.entries()).map(([positionIndex, stepNumber]) => (
+                     <span
                         key={`${index}-step-${stepNumber}`} // Unique key per step number on this button
                         className={cn(
                           "absolute pointer-events-none",
                            variant === 'secondary' ? 'text-accent-foreground/80' : 'text-foreground/70' // Adjust color based on button state
                         )}
-                        style={getClockPositionStyle(finalPositionIndex)}
+                        style={getClockPositionStyle(positionIndex)}
                         aria-hidden="true" // Hide from screen readers
                       >
                         {stepNumber}
                       </span>
-                    );
-                  })}
+                  ))}
                 </Button>
               </TooltipTrigger>
               {allSequenceNumbers.length > 0 && (
