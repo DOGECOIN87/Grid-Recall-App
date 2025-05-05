@@ -92,8 +92,6 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                   onClick={() => onButtonClick(index)}
                   aria-label={`Grid button ${index + 1}${allSequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
                 >
-                  {/* Center number display (pressCount) removed */}
-
                   {/* Display Latest 12 Step Numbers in Clock Positions */}
                   {latestTwelveSequenceNumbers.map((stepNumber) => {
                     const positionIndex = (stepNumber - 1) % 12; // 0-11 (step 1 -> 0, step 12 -> 11, step 13 -> 0)
