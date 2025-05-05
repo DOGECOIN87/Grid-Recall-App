@@ -30,31 +30,38 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
     return 'default';
   };
 
+  // Gets all sequence numbers (step numbers) for a specific button index up to the current step
   const getSequenceNumbers = (index: number): number[] => {
     const numbers: number[] = [];
     for (let i = 0; i < currentStep; i++) {
       if (sequence[i] === index) {
-        numbers.push(i + 1);
+        numbers.push(i + 1); // Step numbers are 1-based
       }
     }
     return numbers;
   };
 
+  // Gets the total press count for a specific button index up to the current step
   const getPressCount = (index: number): number => {
     return sequence.slice(0, currentStep).filter(stepIndex => stepIndex === index).length;
   };
 
-  // Defines positions for the last 4 step numbers: Top, Right, Bottom, Left
-   const getStepPositionStyle = (placementIndex: number): React.CSSProperties => {
-    // placementIndex: 0 for top, 1 for right, 2 for bottom, 3 for left
-    const styles: React.CSSProperties[] = [
-      { top: '8%', left: '50%', transform: 'translateX(-50%)' }, // Top-Center
-      { top: '50%', right: '8%', transform: 'translateY(-50%)' }, // Mid-Right
-      { bottom: '8%', left: '50%', transform: 'translateX(-50%)' }, // Bottom-Center
-      { top: '50%', left: '8%', transform: 'translateY(-50%)' }, // Mid-Left
-    ];
-    // Ensure index wraps correctly for the 4 positions
-    return styles[placementIndex % 4] || {};
+  // Calculates the CSS style for placing a step number at a clock position (1-12)
+  // positionIndex: 0 for 12 o'clock, 1 for 1 o'clock, ..., 11 for 11 o'clock
+  const getClockPositionStyle = (positionIndex: number): React.CSSProperties => {
+    const angleDeg = (positionIndex * 30) - 90; // 0 degrees is right, -90 is top (12 o'clock)
+    const angleRad = angleDeg * (Math.PI / 180);
+    const radius = 40; // Percentage offset from center (adjust for desired distance)
+
+    const top = 50 + radius * Math.sin(angleRad);
+    const left = 50 + radius * Math.cos(angleRad);
+
+    return {
+      position: 'absolute',
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: 'translate(-50%, -50%)', // Center the number on the calculated point
+    };
   };
 
 
@@ -71,11 +78,11 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
       >
         {gridItems.map((index) => {
           const pressCount = getPressCount(index);
-          const sequenceNumbers = getSequenceNumbers(index); // All steps for this button up to currentStep
-          const latestFourSequenceNumbers = sequenceNumbers.slice(-4); // Get the last 4 steps
+          const allSequenceNumbers = getSequenceNumbers(index); // All steps for this button up to currentStep
+          const latestTwelveSequenceNumbers = allSequenceNumbers.slice(-12); // Get the last 12 steps
           const variant = getButtonVariant(index);
           const isCurrent = sequence[currentStep - 1] === index && currentStep > 0;
-          const sequenceString = sequenceNumbers.join(', ');
+          const sequenceString = allSequenceNumbers.join(', ');
 
           return (
             <Tooltip key={index}>
@@ -89,7 +96,7 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                     'flex items-center justify-center p-1 overflow-visible' // Use overflow-visible to allow numbers outside boundary slightly
                   )}
                   onClick={() => onButtonClick(index)}
-                  aria-label={`Grid button ${index + 1}${sequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
+                  aria-label={`Grid button ${index + 1}${allSequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
                 >
                   {/* Display Total Press Count in the center */}
                   {pressCount > 0 && (
@@ -98,27 +105,32 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                         "absolute inset-0 flex items-center justify-center text-2xl md:text-3xl lg:text-4xl font-bold pointer-events-none z-10", // Made count much larger
                          variant === 'secondary' ? 'text-accent-foreground' : 'text-foreground/90'
                       )}
+                      aria-hidden="true" // Hide from screen readers as info is in aria-label and tooltip
                     >
                       {pressCount}
                     </span>
                   )}
 
-                  {/* Display Latest 4 Step Numbers (Clockwise: Top, Right, Bottom, Left) */}
-                  {latestFourSequenceNumbers.map((stepNumber, idx) => (
-                    <span
-                      key={`${index}-${stepNumber}-${idx}`} // More robust key
-                      className={cn(
-                        "absolute text-xs md:text-sm font-medium pointer-events-none", // Kept step numbers smaller
-                         variant === 'secondary' ? 'text-accent-foreground/80' : 'text-foreground/70' // Slightly dimmer
-                      )}
-                      style={getStepPositionStyle(idx)} // idx will be 0, 1, 2, 3
-                    >
-                      {stepNumber}
-                    </span>
-                  ))}
+                  {/* Display Latest 12 Step Numbers in Clock Positions */}
+                  {latestTwelveSequenceNumbers.map((stepNumber) => {
+                    const positionIndex = (stepNumber - 1) % 12; // 0-11 (step 1 -> 0, step 12 -> 11, step 13 -> 0)
+                    return (
+                      <span
+                        key={`${index}-step-${stepNumber}`} // Unique key per step number on this button
+                        className={cn(
+                          "absolute text-xs font-medium pointer-events-none", // Smaller font for step numbers
+                          variant === 'secondary' ? 'text-accent-foreground/80' : 'text-foreground/70' // Slightly dimmer
+                        )}
+                        style={getClockPositionStyle(positionIndex)}
+                        aria-hidden="true" // Hide from screen readers
+                      >
+                        {stepNumber}
+                      </span>
+                    );
+                  })}
                 </Button>
               </TooltipTrigger>
-              {sequenceNumbers.length > 0 && (
+              {allSequenceNumbers.length > 0 && (
                 <TooltipContent>
                   <p>Pressed at steps: {sequenceString}</p>
                 </TooltipContent>
@@ -130,3 +142,4 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
     </TooltipProvider>
   );
 }
+
