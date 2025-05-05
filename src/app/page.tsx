@@ -62,14 +62,18 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground">
       <Card className="w-full max-w-3xl shadow-lg rounded-lg">
-        <CardHeader className="flex flex-row items-center justify-between pb-4">
+        <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 pb-4">
           <CardTitle className="text-2xl md:text-3xl font-bold">GridRecall</CardTitle>
-          <Button onClick={handleReset} variant="outline" size="icon" aria-label="Reset Sequence">
-            <RotateCcw className="h-5 w-5" />
-          </Button>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+             {/* Grid Configurator moved here */}
+            <GridConfigurator gridSize={gridSize} onGridSizeChange={handleGridSizeChange} />
+            <Button onClick={handleReset} variant="outline" size="icon" aria-label="Reset Sequence">
+              <RotateCcw className="h-5 w-5" />
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent className="space-y-10"> {/* Increased spacing from space-y-8 to space-y-10 */}
-          <GridConfigurator gridSize={gridSize} onGridSizeChange={handleGridSizeChange} />
+        <CardContent className="space-y-10">
+          {/* GridConfigurator removed from here */}
           <ButtonGrid
             rows={rows}
             cols={cols}

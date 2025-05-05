@@ -24,16 +24,16 @@ const gridSizes: GridSize[] = [
 
 export function GridConfigurator({ gridSize, onGridSizeChange }: GridConfiguratorProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-4">
-      <Label htmlFor="grid-size-select" className="text-lg font-medium whitespace-nowrap">
-        Grid Size:
+    <div className="flex items-center gap-2"> {/* Reduced gap for tighter header layout */}
+      <Label htmlFor="grid-size-select" className="text-sm font-medium whitespace-nowrap"> {/* Adjusted text size */}
+        Grid:
       </Label>
       <Select
         value={gridSize}
         onValueChange={(value: GridSize) => onGridSizeChange(value)}
       >
-        <SelectTrigger id="grid-size-select" className="w-full sm:w-[180px]">
-          <SelectValue placeholder="Select grid size" />
+        <SelectTrigger id="grid-size-select" className="w-[90px] h-9"> {/* Reduced width and height */}
+          <SelectValue placeholder="Select size" />
         </SelectTrigger>
         <SelectContent>
           {gridSizes.map((size) => (
