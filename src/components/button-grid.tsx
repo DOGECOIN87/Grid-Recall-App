@@ -17,54 +17,63 @@ interface ButtonGridProps {
 export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }: ButtonGridProps) {
   const gridItems = Array.from({ length: rows * cols }, (_, index) => index);
 
-  // Determines the visual style of the button based on its state in the sequence view
   const getButtonVariant = (index: number): 'default' | 'secondary' | 'outline' => {
     const pressedBefore = sequence.slice(0, currentStep).includes(index);
     const pressedAfter = sequence.slice(currentStep).includes(index);
 
     if (pressedBefore) {
-      return 'secondary'; // If pressed before (or at) current step, it's secondary
+      return 'secondary';
     }
     if (pressedAfter) {
-      return 'outline'; // If not pressed before, but pressed after, it's outline (visible when stepping back)
+      return 'outline';
     }
-    return 'default'; // Otherwise, default
+    return 'default';
   };
 
-  // Finds all step numbers (1-based) where this button was pressed within the current view
   const getSequenceNumbers = (index: number): number[] => {
     const numbers: number[] = [];
-    // Iterate up to currentStep to find all occurrences
     for (let i = 0; i < currentStep; i++) {
       if (sequence[i] === index) {
-        numbers.push(i + 1); // Store 1-based step number
+        numbers.push(i + 1);
       }
     }
     return numbers;
   };
 
-  // Calculates the total count of presses for the button up to the current step
-   const getPressCount = (index: number): number => {
+  const getPressCount = (index: number): number => {
     return sequence.slice(0, currentStep).filter(stepIndex => stepIndex === index).length;
+  };
+
+  // Defines positions for the last 4 step numbers: Top, Right, Bottom, Left
+   const getStepPositionStyle = (placementIndex: number): React.CSSProperties => {
+    // placementIndex: 0 for top, 1 for right, 2 for bottom, 3 for left
+    const styles: React.CSSProperties[] = [
+      { top: '8%', left: '50%', transform: 'translateX(-50%)' }, // Top-Center
+      { top: '50%', right: '8%', transform: 'translateY(-50%)' }, // Mid-Right
+      { bottom: '8%', left: '50%', transform: 'translateX(-50%)' }, // Bottom-Center
+      { top: '50%', left: '8%', transform: 'translateY(-50%)' }, // Mid-Left
+    ];
+    // Ensure index wraps correctly for the 4 positions
+    return styles[placementIndex % 4] || {};
   };
 
 
   return (
     <TooltipProvider>
       <div
-        className="grid gap-3 md:gap-4 justify-center" // Increased gap
+        className="grid gap-4 md:gap-5 lg:gap-6 justify-center" // Increased gap slightly
         style={{
           gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-          // Adjusted max width based on larger button size (lg:w-24 is 6rem) + gap (lg:gap-4 is 1rem) = ~7rem per column
-          maxWidth: `${cols * 7}rem`,
+          // Adjusted max width based on larger button size (approx 8rem) + gap (approx 1.5rem) = ~9.5rem per column
+          maxWidth: `${cols * 9.5}rem`,
           margin: '0 auto',
         }}
       >
         {gridItems.map((index) => {
-          const sequenceNumbers = getSequenceNumbers(index);
           const pressCount = getPressCount(index);
+          const sequenceNumbers = getSequenceNumbers(index); // All steps for this button up to currentStep
+          const latestFourSequenceNumbers = sequenceNumbers.slice(-4); // Get the last 4 steps
           const variant = getButtonVariant(index);
-          // isCurrent highlights the button corresponding exactly to the current step being viewed
           const isCurrent = sequence[currentStep - 1] === index && currentStep > 0;
           const sequenceString = sequenceNumbers.join(', ');
 
@@ -74,25 +83,39 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                 <Button
                   variant={variant}
                   className={cn(
-                    'relative aspect-square w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full text-base md:text-lg font-semibold transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-ring', // Increased size, updated text size
+                    'relative aspect-square w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full text-base md:text-lg font-semibold transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-ring', // Increased size again
                     variant === 'secondary' && 'bg-accent text-accent-foreground hover:bg-accent/90',
                     isCurrent && 'ring-2 ring-offset-2 ring-ring',
-                    'flex items-center justify-center p-1 overflow-hidden' // Ensure content is centered
+                    'flex items-center justify-center p-1 overflow-visible' // Use overflow-visible to allow numbers outside boundary slightly
                   )}
                   onClick={() => onButtonClick(index)}
                   aria-label={`Grid button ${index + 1}${sequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
                 >
-                  {/* Display Press Count in the center */}
+                  {/* Display Total Press Count in the center */}
                   {pressCount > 0 && (
                     <span
                       className={cn(
-                        "absolute inset-0 flex items-center justify-center text-sm md:text-base lg:text-lg font-bold pointer-events-none", // Adjusted text size for count
+                        "absolute inset-0 flex items-center justify-center text-2xl md:text-3xl lg:text-4xl font-bold pointer-events-none z-10", // Made count much larger
                          variant === 'secondary' ? 'text-accent-foreground' : 'text-foreground/90'
                       )}
                     >
                       {pressCount}
                     </span>
                   )}
+
+                  {/* Display Latest 4 Step Numbers (Clockwise: Top, Right, Bottom, Left) */}
+                  {latestFourSequenceNumbers.map((stepNumber, idx) => (
+                    <span
+                      key={`${index}-${stepNumber}-${idx}`} // More robust key
+                      className={cn(
+                        "absolute text-xs md:text-sm font-medium pointer-events-none", // Kept step numbers smaller
+                         variant === 'secondary' ? 'text-accent-foreground/80' : 'text-foreground/70' // Slightly dimmer
+                      )}
+                      style={getStepPositionStyle(idx)} // idx will be 0, 1, 2, 3
+                    >
+                      {stepNumber}
+                    </span>
+                  ))}
                 </Button>
               </TooltipTrigger>
               {sequenceNumbers.length > 0 && (
