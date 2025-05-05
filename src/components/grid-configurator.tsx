@@ -24,20 +24,24 @@ const gridSizes: GridSize[] = [
 
 export function GridConfigurator({ gridSize, onGridSizeChange }: GridConfiguratorProps) {
   return (
-    <div className="flex items-center gap-2"> {/* Reduced gap for tighter header layout */}
-      <Label htmlFor="grid-size-select" className="text-sm font-medium whitespace-nowrap"> {/* Adjusted text size */}
-        Grid:
+    <div className="flex items-center gap-2">
+      <Label htmlFor="grid-size-select" className="text-sm font-medium text-foreground/80 whitespace-nowrap">
+        Grid Size:
       </Label>
       <Select
         value={gridSize}
         onValueChange={(value: GridSize) => onGridSizeChange(value)}
       >
-        <SelectTrigger id="grid-size-select" className="w-[90px] h-9"> {/* Reduced width and height */}
+        {/* Use a slightly elevated trigger for better visual separation */}
+        <SelectTrigger
+          id="grid-size-select"
+          className="w-[100px] h-10 bg-background shadow-sm border-border/70 focus:ring-2 focus:ring-ring focus:ring-offset-0"
+        >
           <SelectValue placeholder="Select size" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-popover text-popover-foreground shadow-lg border-border/50">
           {gridSizes.map((size) => (
-            <SelectItem key={size} value={size}>
+            <SelectItem key={size} value={size} className="focus:bg-accent focus:text-accent-foreground">
               {size}
             </SelectItem>
           ))}

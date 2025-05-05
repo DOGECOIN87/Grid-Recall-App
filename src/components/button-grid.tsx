@@ -36,6 +36,7 @@ const getClockPositionStyle = (positionIndex: number, isOuter: boolean): React.C
     pointerEvents: 'none', // Prevent numbers from interfering with button clicks
     lineHeight: '1', // Ensure consistent line height
     textAlign: 'center',
+    zIndex: 1, // Ensure numbers are above the button background but potentially below other elements if needed
   };
 };
 
@@ -52,7 +53,7 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
     }
     if (pressedAfter) {
       // Keep future steps visible but distinct
-      return 'outline'; // Or another variant like 'ghost' if preferred
+      return 'outline'; // Use outline for steps after the current one
     }
     // Default state for unpressed buttons
     return 'default';
@@ -73,12 +74,10 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
   return (
     <TooltipProvider>
       <div
-        className="grid gap-4 md:gap-5 lg:gap-6 justify-center" // Increased gap slightly
+        className="grid gap-4 md:gap-5 lg:gap-6" // Centering handled by parent div in page.tsx
         style={{
           gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-          // Adjusted max width based on larger button size (approx 8rem) + gap (approx 1.5rem) = ~9.5rem per column
-          maxWidth: `${cols * 9.5}rem`,
-          margin: '0 auto',
+          // No max-width needed here if parent div handles centering and max-width
         }}
       >
         {gridItems.map((index) => {
@@ -111,7 +110,7 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
               if (attempts < 12) {
                   occupiedPositions.set(finalPositionIndex, stepNumber);
               } else {
-                  // Fallback: If all 12 slots are filled
+                  // Fallback: If all 12 slots are filled (shouldn't happen with 2 rings now)
                   console.warn(`Button ${index}, Step ${stepNumber}: Could not find an empty slot after 12 attempts. Overwriting last found position.`);
                   // Place it in the last checked slot (which might overwrite)
                   occupiedPositions.set(finalPositionIndex, stepNumber);
@@ -135,10 +134,18 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                 <Button
                   variant={variant}
                   className={cn(
-                    'relative aspect-square w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full text-base md:text-lg font-semibold transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-ring', // Increased size again
-                    variant === 'secondary' && 'bg-accent text-accent-foreground hover:bg-accent/90',
-                    isCurrent && 'ring-2 ring-offset-2 ring-ring',
-                    'flex items-center justify-center p-1 overflow-visible' // Use overflow-visible to allow numbers outside boundary slightly
+                    'relative aspect-square w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full text-lg font-semibold transition-all duration-150 ease-in-out focus:ring-4 focus:ring-ring focus:ring-offset-2', // Enhanced focus ring
+                    'flex items-center justify-center p-1 overflow-visible', // Use overflow-visible
+                    // Apply accent colors for secondary variant (pressed steps)
+                    variant === 'secondary' && 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-md',
+                    // Dim outline variant for future steps
+                    variant === 'outline' && 'border-border/50 text-muted-foreground bg-transparent hover:bg-muted/50',
+                     // Default variant styling
+                    variant === 'default' && 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+                    // Highlight the most recent step
+                    isCurrent && 'ring-4 ring-offset-2 ring-ring/80 shadow-lg scale-105', // Slightly larger ring and subtle shadow/scale
+                     // Subtle scale transform on press
+                    'active:scale-95'
                   )}
                   onClick={() => onButtonClick(index)}
                   aria-label={`Grid button ${index + 1}${allSequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
@@ -148,9 +155,9 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                      <span
                         key={`${index}-inner-step-${stepNumber}`}
                         className={cn(
-                          "absolute pointer-events-none",
+                          "absolute pointer-events-none rounded-full bg-background/10 backdrop-blur-sm px-1 py-0.5", // Added subtle background/blur for readability
                            // Inner colors: Accent foreground when pressed, default foreground otherwise
-                           variant === 'secondary' ? 'text-accent-foreground/80' : 'text-foreground/70'
+                           variant === 'secondary' ? 'text-accent-foreground/90' : 'text-foreground/80'
                         )}
                         style={getClockPositionStyle(positionIndex, false)} // isOuter = false
                         aria-hidden="true"
@@ -163,9 +170,9 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                      <span
                         key={`${index}-outer-step-${stepNumber}`}
                         className={cn(
-                          "absolute pointer-events-none",
+                          "absolute pointer-events-none rounded-full bg-background/10 backdrop-blur-sm px-1 py-0.5", // Added subtle background/blur for readability
                            // Outer colors (inverted): Default foreground when pressed, accent color otherwise
-                           variant === 'secondary' ? 'text-foreground/90' : 'text-accent'
+                           variant === 'secondary' ? 'text-foreground/90' : 'text-accent/90 font-bold' // Slightly bolder/brighter accent
                         )}
                         style={getClockPositionStyle(positionIndex, true)} // isOuter = true
                         aria-hidden="true"
@@ -176,7 +183,7 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                 </Button>
               </TooltipTrigger>
               {allSequenceNumbers.length > 0 && (
-                <TooltipContent>
+                <TooltipContent side="bottom" className="bg-popover text-popover-foreground rounded-md shadow-lg">
                   <p>Pressed at steps: {sequenceString}</p>
                 </TooltipContent>
               )}
