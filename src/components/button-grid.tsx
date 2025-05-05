@@ -43,30 +43,26 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
     return numbers;
   };
 
-  // Defines the position class for each sequence number (up to 5), clockwise starting top-center
-  const getPositionClass = (order: number): string => {
-    switch (order) {
-      case 0: return 'top-0 left-1/2 -translate-x-1/2';    // Top center
-      case 1: return 'top-1/2 right-0 -translate-y-1/2';   // Right center
-      case 2: return 'bottom-0 left-1/2 -translate-x-1/2'; // Bottom center
-      case 3: return 'top-1/2 left-0 -translate-y-1/2';    // Left center
-      case 4: return 'inset-0 flex items-center justify-center'; // Center
-      default: return 'hidden'; // Hide if more than 5
-    }
+  // Calculates the total count of presses for the button up to the current step
+   const getPressCount = (index: number): number => {
+    return sequence.slice(0, currentStep).filter(stepIndex => stepIndex === index).length;
   };
+
 
   return (
     <TooltipProvider>
       <div
-        className="grid gap-2 md:gap-3 justify-center"
+        className="grid gap-3 md:gap-4 justify-center" // Increased gap
         style={{
           gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-          maxWidth: `${cols * 4.5}rem`, // Adjusted for circle aspect ratio if needed
+          // Adjusted max width based on larger button size (lg:w-24 is 6rem) + gap (lg:gap-4 is 1rem) = ~7rem per column
+          maxWidth: `${cols * 7}rem`,
           margin: '0 auto',
         }}
       >
         {gridItems.map((index) => {
           const sequenceNumbers = getSequenceNumbers(index);
+          const pressCount = getPressCount(index);
           const variant = getButtonVariant(index);
           // isCurrent highlights the button corresponding exactly to the current step being viewed
           const isCurrent = sequence[currentStep - 1] === index && currentStep > 0;
@@ -78,34 +74,25 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                 <Button
                   variant={variant}
                   className={cn(
-                    'relative aspect-square w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full text-xs md:text-sm font-semibold transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-ring', // Changed rounded-md to rounded-full
+                    'relative aspect-square w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full text-base md:text-lg font-semibold transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-ring', // Increased size, updated text size
                     variant === 'secondary' && 'bg-accent text-accent-foreground hover:bg-accent/90',
                     isCurrent && 'ring-2 ring-offset-2 ring-ring',
-                    'flex items-center justify-center p-1 overflow-hidden'
+                    'flex items-center justify-center p-1 overflow-hidden' // Ensure content is centered
                   )}
                   onClick={() => onButtonClick(index)}
                   aria-label={`Grid button ${index + 1}${sequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
                 >
-                  {/* Positioned Sequence Numbers */}
-                  {sequenceNumbers.slice(0, 5).map((num, order) => (
+                  {/* Display Press Count in the center */}
+                  {pressCount > 0 && (
                     <span
-                      key={order}
                       className={cn(
-                        "absolute text-[9px] md:text-[10px] lg:text-[11px] font-bold leading-none p-0.5 pointer-events-none", // Smallest text size, no padding
-                        getPositionClass(order),
-                        variant === 'secondary' ? 'text-accent-foreground' : 'text-foreground/90', // Adjusted text color
-                        'flex items-center justify-center' // Ensure number is centered within its small area
+                        "absolute inset-0 flex items-center justify-center text-sm md:text-base lg:text-lg font-bold pointer-events-none", // Adjusted text size for count
+                         variant === 'secondary' ? 'text-accent-foreground' : 'text-foreground/90'
                       )}
-                      // Adjustments might be needed based on font and circle size
-                      style={{
-                         // Adjust transform slightly if needed for visual centering
-                        transform: `${getPositionClass(order).includes('translate') ? '' : 'translate(-50%, -50%)'}`,
-                        margin: '1px' // Small margin to prevent touching edge
-                      }}
                     >
-                      {num}
+                      {pressCount}
                     </span>
-                  ))}
+                  )}
                 </Button>
               </TooltipTrigger>
               {sequenceNumbers.length > 0 && (
