@@ -41,11 +41,6 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
     return numbers;
   };
 
-  // Gets the total press count for a specific button index up to the current step
-  const getPressCount = (index: number): number => {
-    return sequence.slice(0, currentStep).filter(stepIndex => stepIndex === index).length;
-  };
-
   // Calculates the CSS style for placing a step number at a clock position (1-12)
   // positionIndex: 0 for 12 o'clock, 1 for 1 o'clock, ..., 11 for 11 o'clock
   const getClockPositionStyle = (positionIndex: number): React.CSSProperties => {
@@ -77,7 +72,6 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
         }}
       >
         {gridItems.map((index) => {
-          const pressCount = getPressCount(index);
           const allSequenceNumbers = getSequenceNumbers(index); // All steps for this button up to currentStep
           const latestTwelveSequenceNumbers = allSequenceNumbers.slice(-12); // Get the last 12 steps
           const variant = getButtonVariant(index);
@@ -98,18 +92,7 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                   onClick={() => onButtonClick(index)}
                   aria-label={`Grid button ${index + 1}${allSequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
                 >
-                  {/* Display Total Press Count in the center */}
-                  {pressCount > 0 && (
-                    <span
-                      className={cn(
-                        "absolute inset-0 flex items-center justify-center text-2xl md:text-3xl lg:text-4xl font-bold pointer-events-none z-10", // Made count much larger
-                         variant === 'secondary' ? 'text-accent-foreground' : 'text-foreground/90'
-                      )}
-                      aria-hidden="true" // Hide from screen readers as info is in aria-label and tooltip
-                    >
-                      {pressCount}
-                    </span>
-                  )}
+                  {/* Center number display (pressCount) removed */}
 
                   {/* Display Latest 12 Step Numbers in Clock Positions */}
                   {latestTwelveSequenceNumbers.map((stepNumber) => {
