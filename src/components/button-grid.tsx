@@ -22,11 +22,13 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
     const pressedAfter = sequence.slice(currentStep).includes(index);
 
     if (pressedBefore) {
-      return 'secondary';
+      return 'secondary'; // Highlight buttons pressed up to the current step
     }
     if (pressedAfter) {
-      return 'outline';
+      // Keep future steps visible but distinct
+      return 'outline'; // Or another variant like 'ghost' if preferred
     }
+    // Default state for unpressed buttons
     return 'default';
   };
 
@@ -41,13 +43,15 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
     return numbers;
   };
 
-  // Calculates the CSS style for placing a step number at a clock position (1-12)
-  // positionIndex: 0 for 12 o'clock, 1 for 1 o'clock, ..., 11 for 11 o'clock
+  // Calculates the CSS style for placing a step number at a clock position (0-11)
+  // 0 = 12 o'clock, 1 = 1 o'clock, ..., 11 = 11 o'clock
   const getClockPositionStyle = (positionIndex: number): React.CSSProperties => {
     const angleDeg = (positionIndex * 30) - 90; // 0 degrees is right, -90 is top (12 o'clock)
     const angleRad = angleDeg * (Math.PI / 180);
-    const radius = 40; // Percentage offset from center (adjust for desired distance)
+    // Adjust radius based on button size - keep numbers near the edge
+    const radius = 40; // Percentage offset from center (40-45% usually works well)
 
+    // Calculate position relative to the button's center (50%, 50%)
     const top = 50 + radius * Math.sin(angleRad);
     const left = 50 + radius * Math.cos(angleRad);
 
@@ -56,6 +60,11 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
       top: `${top}%`,
       left: `${left}%`,
       transform: 'translate(-50%, -50%)', // Center the number on the calculated point
+      fontSize: '0.65rem', // Smaller font size for step numbers
+      fontWeight: '500', // Medium weight
+      pointerEvents: 'none', // Prevent numbers from interfering with button clicks
+      lineHeight: '1', // Ensure consistent line height
+      textAlign: 'center',
     };
   };
 
@@ -77,6 +86,7 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
           const variant = getButtonVariant(index);
           const isCurrent = sequence[currentStep - 1] === index && currentStep > 0;
           const sequenceString = allSequenceNumbers.join(', ');
+          const occupiedPositions = new Set<number>(); // Track occupied positions for this button
 
           return (
             <Tooltip key={index}>
@@ -92,17 +102,40 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                   onClick={() => onButtonClick(index)}
                   aria-label={`Grid button ${index + 1}${allSequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
                 >
-                  {/* Display Latest 12 Step Numbers in Clock Positions */}
+                  {/* Display Latest 12 Step Numbers in Clock Positions, avoiding overlap */}
                   {latestTwelveSequenceNumbers.map((stepNumber) => {
-                    const positionIndex = (stepNumber - 1) % 12; // 0-11 (step 1 -> 0, step 12 -> 11, step 13 -> 0)
+                    const initialPositionIndex = (stepNumber - 1) % 12; // Calculate initial target position (0-11)
+                    let finalPositionIndex = initialPositionIndex;
+
+                    // Find the next available position clockwise if the initial one is taken
+                    let attempts = 0;
+                    while (occupiedPositions.has(finalPositionIndex) && attempts < 12) {
+                      finalPositionIndex = (finalPositionIndex + 1) % 12;
+                      attempts++;
+                    }
+
+                    // If after 12 attempts we couldn't find a spot (shouldn't happen with 12 slots),
+                    // we might fall back to the initial position or log an error.
+                    // For now, just use the finalPositionIndex found (or the initial if loop didn't run).
+                    if (attempts < 12) {
+                      occupiedPositions.add(finalPositionIndex); // Mark this position as occupied
+                    } else {
+                       // Fallback or error handling if needed, for now, we overwrite the initial
+                       finalPositionIndex = initialPositionIndex;
+                       if (!occupiedPositions.has(finalPositionIndex)) {
+                           occupiedPositions.add(finalPositionIndex);
+                       }
+                    }
+
+
                     return (
                       <span
                         key={`${index}-step-${stepNumber}`} // Unique key per step number on this button
                         className={cn(
-                          "absolute text-xs font-medium pointer-events-none", // Smaller font for step numbers
-                          variant === 'secondary' ? 'text-accent-foreground/80' : 'text-foreground/70' // Slightly dimmer
+                          "absolute pointer-events-none",
+                           variant === 'secondary' ? 'text-accent-foreground/80' : 'text-foreground/70' // Adjust color based on button state
                         )}
-                        style={getClockPositionStyle(positionIndex)}
+                        style={getClockPositionStyle(finalPositionIndex)}
                         aria-hidden="true" // Hide from screen readers
                       >
                         {stepNumber}
@@ -123,4 +156,3 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
     </TooltipProvider>
   );
 }
-
