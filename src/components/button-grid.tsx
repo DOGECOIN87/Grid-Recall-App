@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -12,6 +13,32 @@ interface ButtonGridProps {
   currentStep: number;
   onButtonClick: (index: number) => void;
 }
+
+// Calculates the CSS style for placing a step number at a clock position (0-11)
+// isOuter determines if the number should be in the inner (1-12) or outer (13+) ring.
+const getClockPositionStyle = (positionIndex: number, isOuter: boolean): React.CSSProperties => {
+  const angleDeg = (positionIndex * 30) - 90; // 0 degrees is right, -90 is top (12 o'clock)
+  const angleRad = angleDeg * (Math.PI / 180);
+  // Adjust radius based on inner/outer ring
+  const radius = isOuter ? 58 : 40; // Percentage offset from center (e.g., 40% inner, 58% outer)
+
+  // Calculate position relative to the button's center (50%, 50%)
+  const top = 50 + radius * Math.sin(angleRad);
+  const left = 50 + radius * Math.cos(angleRad);
+
+  return {
+    position: 'absolute',
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: 'translate(-50%, -50%)', // Center the number on the calculated point
+    fontSize: '0.65rem', // Smaller font size for step numbers
+    fontWeight: '500', // Medium weight
+    pointerEvents: 'none', // Prevent numbers from interfering with button clicks
+    lineHeight: '1', // Ensure consistent line height
+    textAlign: 'center',
+  };
+};
+
 
 export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }: ButtonGridProps) {
   const gridItems = Array.from({ length: rows * cols }, (_, index) => index);
@@ -42,31 +69,6 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
     return numbers;
   };
 
-  // Calculates the CSS style for placing a step number at a clock position (0-11)
-  // 0 = 12 o'clock, 1 = 1 o'clock, ..., 11 = 11 o'clock
-  const getClockPositionStyle = (positionIndex: number): React.CSSProperties => {
-    const angleDeg = (positionIndex * 30) - 90; // 0 degrees is right, -90 is top (12 o'clock)
-    const angleRad = angleDeg * (Math.PI / 180);
-    // Adjust radius based on button size - keep numbers near the edge
-    const radius = 40; // Percentage offset from center (40-45% usually works well)
-
-    // Calculate position relative to the button's center (50%, 50%)
-    const top = 50 + radius * Math.sin(angleRad);
-    const left = 50 + radius * Math.cos(angleRad);
-
-    return {
-      position: 'absolute',
-      top: `${top}%`,
-      left: `${left}%`,
-      transform: 'translate(-50%, -50%)', // Center the number on the calculated point
-      fontSize: '0.65rem', // Smaller font size for step numbers
-      fontWeight: '500', // Medium weight
-      pointerEvents: 'none', // Prevent numbers from interfering with button clicks
-      lineHeight: '1', // Ensure consistent line height
-      textAlign: 'center',
-    };
-  };
-
 
   return (
     <TooltipProvider>
@@ -81,38 +83,49 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
       >
         {gridItems.map((index) => {
           const allSequenceNumbers = getSequenceNumbers(index); // All steps for this button up to currentStep
+          const innerSequenceNumbers = allSequenceNumbers.filter(n => n <= 12);
+          const outerSequenceNumbers = allSequenceNumbers.filter(n => n > 12);
+
           const variant = getButtonVariant(index);
           const isCurrent = sequence[currentStep - 1] === index && currentStep > 0;
           const sequenceString = allSequenceNumbers.join(', ');
 
           // Map to store final calculated positions for each step number on this button
           // Key: positionIndex (0-11), Value: stepNumber
-          const occupiedPositions = new Map<number, number>();
+          const occupiedInnerPositions = new Map<number, number>();
+          const occupiedOuterPositions = new Map<number, number>();
 
-          // Calculate positions for ALL sequence numbers for this button
-          allSequenceNumbers.forEach((stepNumber) => {
-            const initialPositionIndex = (stepNumber - 1) % 12; // Calculate initial target position (0-11)
-            let finalPositionIndex = initialPositionIndex;
-            let attempts = 0;
+          // Function to handle position finding and conflict resolution
+          const findPosition = (stepNumber: number, occupiedPositions: Map<number, number>) => {
+             const initialPositionIndex = (stepNumber - 1) % 12; // Calculate initial target position (0-11)
+             let finalPositionIndex = initialPositionIndex;
+             let attempts = 0;
 
-            // Find the next available position clockwise if the initial one is taken
-            while (occupiedPositions.has(finalPositionIndex) && attempts < 12) {
-              finalPositionIndex = (finalPositionIndex + 1) % 12;
-              attempts++;
-            }
+             // Find the next available position clockwise if the initial one is taken
+             while (occupiedPositions.has(finalPositionIndex) && attempts < 12) {
+               finalPositionIndex = (finalPositionIndex + 1) % 12;
+               attempts++;
+             }
 
-            // If a spot is found (or the initial was free), mark it as occupied by this stepNumber
-            if (attempts < 12) {
-                 occupiedPositions.set(finalPositionIndex, stepNumber);
-            } else {
-                // Fallback: If all 12 slots are filled (e.g., >12 presses on this button),
-                // log a warning. The current behavior might overwrite an existing number
-                // if we still call occupiedPositions.set(). For now, let's just log.
-                // A more robust solution might involve inner rings or scaling text.
-                console.warn(`Button ${index}: Could not find an empty slot for step ${stepNumber} after 12 attempts. Display overlap may occur.`);
-                // We can still attempt to place it, potentially overwriting
-                 occupiedPositions.set(finalPositionIndex, stepNumber);
-            }
+              // If a spot is found (or the initial was free), mark it as occupied by this stepNumber
+              if (attempts < 12) {
+                  occupiedPositions.set(finalPositionIndex, stepNumber);
+              } else {
+                  // Fallback: If all 12 slots are filled
+                  console.warn(`Button ${index}, Step ${stepNumber}: Could not find an empty slot after 12 attempts. Overwriting last found position.`);
+                  // Place it in the last checked slot (which might overwrite)
+                  occupiedPositions.set(finalPositionIndex, stepNumber);
+              }
+          };
+
+          // Calculate positions for INNER sequence numbers (1-12)
+          innerSequenceNumbers.forEach(stepNumber => {
+            findPosition(stepNumber, occupiedInnerPositions);
+          });
+
+          // Calculate positions for OUTER sequence numbers (>12)
+          outerSequenceNumbers.forEach(stepNumber => {
+             findPosition(stepNumber, occupiedOuterPositions);
           });
 
 
@@ -130,16 +143,32 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick }:
                   onClick={() => onButtonClick(index)}
                   aria-label={`Grid button ${index + 1}${allSequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
                 >
-                  {/* Render Step Numbers based on calculated positions */}
-                  {Array.from(occupiedPositions.entries()).map(([positionIndex, stepNumber]) => (
+                  {/* Render Inner Step Numbers */}
+                  {Array.from(occupiedInnerPositions.entries()).map(([positionIndex, stepNumber]) => (
                      <span
-                        key={`${index}-step-${stepNumber}`} // Unique key per step number on this button
+                        key={`${index}-inner-step-${stepNumber}`}
                         className={cn(
                           "absolute pointer-events-none",
-                           variant === 'secondary' ? 'text-accent-foreground/80' : 'text-foreground/70' // Adjust color based on button state
+                           // Inner colors: Accent foreground when pressed, default foreground otherwise
+                           variant === 'secondary' ? 'text-accent-foreground/80' : 'text-foreground/70'
                         )}
-                        style={getClockPositionStyle(positionIndex)}
-                        aria-hidden="true" // Hide from screen readers
+                        style={getClockPositionStyle(positionIndex, false)} // isOuter = false
+                        aria-hidden="true"
+                      >
+                        {stepNumber}
+                      </span>
+                  ))}
+                   {/* Render Outer Step Numbers */}
+                   {Array.from(occupiedOuterPositions.entries()).map(([positionIndex, stepNumber]) => (
+                     <span
+                        key={`${index}-outer-step-${stepNumber}`}
+                        className={cn(
+                          "absolute pointer-events-none",
+                           // Outer colors (inverted): Default foreground when pressed, accent color otherwise
+                           variant === 'secondary' ? 'text-foreground/90' : 'text-accent'
+                        )}
+                        style={getClockPositionStyle(positionIndex, true)} // isOuter = true
+                        aria-hidden="true"
                       >
                         {stepNumber}
                       </span>
