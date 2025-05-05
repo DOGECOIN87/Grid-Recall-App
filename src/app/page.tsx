@@ -68,7 +68,7 @@ export default function Home() {
             <RotateCcw className="h-5 w-5" />
           </Button>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-8"> {/* Increased spacing from space-y-6 to space-y-8 */}
           <GridConfigurator gridSize={gridSize} onGridSizeChange={handleGridSizeChange} />
           <ButtonGrid
             rows={rows}
