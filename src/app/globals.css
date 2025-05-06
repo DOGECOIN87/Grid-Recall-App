@@ -84,8 +84,8 @@ body {
     @apply border-border;
   }
   body {
-     /* Add a subtle gradient background */
-    @apply bg-gradient-to-br from-background to-muted/30 text-foreground;
+     /* Apply background texture */
+    @apply bg-[url('/images/background-texture.png')] bg-repeat bg-fixed text-foreground;
   }
 
   /* Enhance focus rings for accessibility and style */
