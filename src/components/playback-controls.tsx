@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 
-interface PlayControlsProps {
+interface PlaybackControlsProps { // Renamed interface
   isPlaying: boolean;
   onPlay: () => void;
   onPause: () => void;
@@ -16,7 +16,8 @@ interface PlayControlsProps {
   disabled?: boolean;
 }
 
-export function PlayControls({ isPlaying, onPlay, onPause, onStop, disabled = false }: PlayControlsProps) {
+// Renamed component export
+export function PlaybackControls({ isPlaying, onPlay, onPause, onStop, disabled = false }: PlaybackControlsProps) {
   return (
     <TooltipProvider>
       <div className="flex items-center justify-center gap-2 md:gap-3">
