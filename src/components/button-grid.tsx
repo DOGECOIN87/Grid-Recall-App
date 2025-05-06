@@ -29,12 +29,12 @@ const getClockPositionStyle = (positionIndex: number, isOuter: boolean): React.C
     top: `${top}%`,
     left: `${left}%`,
     transform: 'translate(-50%, -50%)', // Center the number
-    fontSize: '0.65rem', // Slightly reduced font size for better fit
-    fontWeight: '600', // Make numbers slightly bolder
+    fontSize: isOuter ? '0.7rem' : '0.65rem', // Outer numbers slightly larger
+    fontWeight: isOuter ? '700' : '600', // Outer numbers bolder, inner regular bold
     pointerEvents: 'none',
     lineHeight: '1',
     textAlign: 'center',
-    zIndex: 1,
+    zIndex: 1, // Ensure numbers are above button base
     minWidth: '1.1rem', // Ensure minimum width for single digits
     padding: '0.1rem 0.15rem', // Fine-tune padding
   };
@@ -156,7 +156,7 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick, d
                      <span
                         key={`${index}-inner-step-${stepNumber}`}
                         className={cn(
-                          "absolute pointer-events-none rounded-full bg-background/20 backdrop-blur-sm", // Slightly more visible background for inner
+                          "absolute pointer-events-none rounded-full bg-background/30 backdrop-blur-sm px-1 py-0.5", // Slightly more visible background
                            variant === 'secondary' ? 'text-accent-foreground/90' : 'text-foreground/80' // Adjust text color based on button state
                         )}
                         style={getClockPositionStyle(positionIndex, false)} // isOuter = false
@@ -170,8 +170,8 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick, d
                      <span
                         key={`${index}-outer-step-${stepNumber}`}
                         className={cn(
-                          "absolute pointer-events-none rounded-full bg-muted/30 backdrop-blur-sm ring-1 ring-inset ring-border/30", // Different background + subtle ring for outer
-                           variant === 'secondary' ? 'text-foreground/95' : 'text-primary/90 font-bold' // Bolder text for outer ring
+                          "absolute pointer-events-none rounded-full bg-muted/50 backdrop-blur-md px-1 py-0.5 ring-1 ring-inset ring-border/50 shadow-sm", // More distinct background + ring + shadow for outer
+                           variant === 'secondary' ? 'text-foreground' : 'text-primary font-bold' // Bolder text for outer, ensure contrast
                         )}
                         style={getClockPositionStyle(positionIndex, true)} // isOuter = true
                         aria-hidden="true"
