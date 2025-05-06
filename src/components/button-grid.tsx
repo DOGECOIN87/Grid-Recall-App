@@ -29,12 +29,14 @@ const getClockPositionStyle = (positionIndex: number, isOuter: boolean): React.C
     top: `${top}%`,
     left: `${left}%`,
     transform: 'translate(-50%, -50%)', // Center the number
-    fontSize: '0.65rem',
-    fontWeight: '500',
+    fontSize: '0.65rem', // Slightly reduced font size for better fit
+    fontWeight: '600', // Make numbers slightly bolder
     pointerEvents: 'none',
     lineHeight: '1',
     textAlign: 'center',
     zIndex: 1,
+    minWidth: '1.1rem', // Ensure minimum width for single digits
+    padding: '0.1rem 0.15rem', // Fine-tune padding
   };
 };
 
@@ -46,15 +48,27 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick, d
     const pressedBefore = sequence.slice(0, currentStep).includes(index);
     const pressedAfter = sequence.slice(currentStep).includes(index);
 
-    if (pressedBefore) return 'secondary';
-    if (pressedAfter) return 'outline';
-    return 'default';
+    if (pressedBefore) return 'secondary'; // Use secondary (accent color) for steps already passed
+    if (pressedAfter) return 'outline'; // Use outline for steps yet to come in playback/review
+    return 'default'; // Default appearance
   };
 
-  const getSequenceNumbers = (index: number): number[] => {
+  // Get all step numbers (1-based) for a given button index up to the current step
+  const getAllSequenceNumbersForButton = (buttonIndex: number): number[] => {
     const numbers: number[] = [];
-    for (let i = 0; i < currentStep; i++) {
-      if (sequence[i] === index) {
+    for (let i = 0; i < sequence.length; i++) { // Iterate through the *entire* sequence
+      if (sequence[i] === buttonIndex) {
+        numbers.push(i + 1); // 1-based step numbers
+      }
+    }
+    return numbers;
+  };
+
+  // Get step numbers (1-based) for a given button index ONLY up to the current display step
+  const getVisibleSequenceNumbersForButton = (buttonIndex: number): number[] => {
+    const numbers: number[] = [];
+    for (let i = 0; i < currentStep; i++) { // Iterate only up to currentStep
+      if (sequence[i] === buttonIndex) {
         numbers.push(i + 1); // 1-based step numbers
       }
     }
@@ -68,43 +82,48 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick, d
         className="grid gap-4 md:gap-5 lg:gap-6"
         style={{
           gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+          gridAutoRows: 'minmax(0, 1fr)', // Ensure rows also take up equal space
         }}
+        aria-label={`Button Grid ${rows}x${cols}`}
       >
         {gridItems.map((index) => {
-          const allSequenceNumbers = getSequenceNumbers(index);
-          const innerSequenceNumbers = allSequenceNumbers.filter(n => n <= 12);
-          const outerSequenceNumbers = allSequenceNumbers.filter(n => n > 12);
+          const visibleSequenceNumbers = getVisibleSequenceNumbersForButton(index);
+          const allSequenceNumbers = getAllSequenceNumbersForButton(index); // For tooltip
+
+          const innerSequenceNumbers = visibleSequenceNumbers.filter(n => n <= 12);
+          const outerSequenceNumbers = visibleSequenceNumbers.filter(n => n > 12);
 
           const variant = getButtonVariant(index);
-          const isCurrent = sequence[currentStep - 1] === index && currentStep > 0;
+          // Highlight the button if it's the very last step shown
+          const isCurrentStepButton = sequence[currentStep - 1] === index && currentStep > 0;
           const sequenceString = allSequenceNumbers.join(', ');
 
-          const occupiedInnerPositions = new Map<number, number>();
-          const occupiedOuterPositions = new Map<number, number>();
+          // Maps to store occupied clock positions to avoid overlap
+          const occupiedInnerPositions = new Map<number, number>(); // positionIndex -> stepNumber
+          const occupiedOuterPositions = new Map<number, number>(); // positionIndex -> stepNumber
 
+          // Function to find the next available clock position (0-11)
           const findPosition = (stepNumber: number, occupiedPositions: Map<number, number>) => {
              const initialPositionIndex = (stepNumber - 1) % 12;
              let finalPositionIndex = initialPositionIndex;
              let attempts = 0;
 
+             // Find the next empty slot clockwise
              while (occupiedPositions.has(finalPositionIndex) && attempts < 12) {
                finalPositionIndex = (finalPositionIndex + 1) % 12;
                attempts++;
              }
 
-              if (attempts < 12) {
-                  occupiedPositions.set(finalPositionIndex, stepNumber);
-              } else {
-                  // Fallback: If all 12 slots are filled (e.g., inner ring)
-                  // Place it in the last checked slot (might overwrite, though unlikely with 2 rings)
-                  occupiedPositions.set(finalPositionIndex, stepNumber);
-              }
+              // Place the number in the found slot (or overwrite if full, though unlikely with 2 rings)
+              occupiedPositions.set(finalPositionIndex, stepNumber);
           };
 
+          // Assign positions for inner numbers
           innerSequenceNumbers.forEach(stepNumber => {
             findPosition(stepNumber, occupiedInnerPositions);
           });
 
+          // Assign positions for outer numbers
           outerSequenceNumbers.forEach(stepNumber => {
              findPosition(stepNumber, occupiedOuterPositions);
           });
@@ -117,25 +136,28 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick, d
                   variant={variant}
                   className={cn(
                     'relative aspect-square w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full text-lg font-semibold transition-all duration-150 ease-in-out focus:ring-4 focus:ring-ring focus:ring-offset-2',
-                    'flex items-center justify-center p-1 overflow-visible',
-                    variant === 'secondary' && 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-md',
-                    variant === 'outline' && 'border-border/50 text-muted-foreground bg-transparent hover:bg-muted/50',
-                    variant === 'default' && 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-                    isCurrent && 'ring-4 ring-offset-2 ring-ring/80 shadow-lg scale-105',
+                    'flex items-center justify-center p-1 overflow-visible shadow-md', // Added shadow-md
+                    // Style based on whether the step has passed or not
+                    variant === 'secondary' && 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg', // Passed steps
+                    variant === 'outline' && 'border-border/50 text-muted-foreground bg-transparent hover:bg-muted/50', // Future steps in review
+                    variant === 'default' && 'bg-secondary text-secondary-foreground hover:bg-secondary/80', // Default/unused
+                    // Highlight the button corresponding to the current step number being shown
+                    isCurrentStepButton && 'ring-4 ring-offset-2 ring-ring/80 shadow-xl scale-105 border-2 border-primary', // Make current step pop
                     'active:scale-95',
-                    disabled && 'opacity-70 cursor-not-allowed pointer-events-none' // Style for disabled state
+                    disabled && 'opacity-70 cursor-not-allowed pointer-events-none shadow-inner' // Style for disabled state
                   )}
-                  onClick={() => onButtonClick(index)}
+                  onClick={() => !disabled && onButtonClick(index)} // Only allow click if not disabled
                   aria-label={`Grid button ${index + 1}${allSequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
                   disabled={disabled} // Apply disabled prop
+                  aria-pressed={visibleSequenceNumbers.length > 0} // Indicate if pressed in the current view
                 >
-                  {/* Render Inner Step Numbers */}
+                  {/* Render Inner Step Numbers (1-12) */}
                   {Array.from(occupiedInnerPositions.entries()).map(([positionIndex, stepNumber]) => (
                      <span
                         key={`${index}-inner-step-${stepNumber}`}
                         className={cn(
-                          "absolute pointer-events-none rounded-full bg-background/10 backdrop-blur-sm px-1 py-0.5",
-                           variant === 'secondary' ? 'text-accent-foreground/90' : 'text-foreground/80'
+                          "absolute pointer-events-none rounded-full bg-background/20 backdrop-blur-sm", // Slightly more visible background for inner
+                           variant === 'secondary' ? 'text-accent-foreground/90' : 'text-foreground/80' // Adjust text color based on button state
                         )}
                         style={getClockPositionStyle(positionIndex, false)} // isOuter = false
                         aria-hidden="true"
@@ -143,13 +165,13 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick, d
                         {stepNumber}
                       </span>
                   ))}
-                   {/* Render Outer Step Numbers */}
+                   {/* Render Outer Step Numbers (>12) */}
                    {Array.from(occupiedOuterPositions.entries()).map(([positionIndex, stepNumber]) => (
                      <span
                         key={`${index}-outer-step-${stepNumber}`}
                         className={cn(
-                          "absolute pointer-events-none rounded-full bg-background/10 backdrop-blur-sm px-1 py-0.5",
-                           variant === 'secondary' ? 'text-foreground/90' : 'text-accent/90 font-bold'
+                          "absolute pointer-events-none rounded-full bg-muted/30 backdrop-blur-sm ring-1 ring-inset ring-border/30", // Different background + subtle ring for outer
+                           variant === 'secondary' ? 'text-foreground/95' : 'text-primary/90 font-bold' // Bolder text for outer ring
                         )}
                         style={getClockPositionStyle(positionIndex, true)} // isOuter = true
                         aria-hidden="true"
@@ -159,8 +181,9 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick, d
                   ))}
                 </Button>
               </TooltipTrigger>
+              {/* Tooltip shows *all* steps the button was pressed in, regardless of currentStep */}
               {allSequenceNumbers.length > 0 && (
-                <TooltipContent side="bottom" className="bg-popover text-popover-foreground rounded-md shadow-lg">
+                <TooltipContent side="bottom" className="bg-popover text-popover-foreground rounded-md shadow-lg border border-border/50">
                   <p>Pressed at steps: {sequenceString}</p>
                 </TooltipContent>
               )}
