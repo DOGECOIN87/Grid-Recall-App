@@ -1,0 +1,46 @@
+# GridRecall Content Rating Information
+
+## App Category
+- **Category**: Games
+- **Subcategory**: Puzzle / Brain Games
+
+## Content Rating Questionnaire Responses
+
+### Violence
+- **Contains realistic violence**: No
+- **Contains cartoon or fantasy violence**: No
+- **Contains non-realistic violence towards fantasy characters**: No
+- **Contains non-realistic violence towards human-like characters**: No
+- **Contains realistic violence towards human-like characters**: No
+
+### Sexuality
+- **Contains nudity**: No
+- **Contains suggestive or sexual content**: No
+- **Contains sexual themes**: No
+
+### Language
+- **Contains profanity or crude humor**: No
+- **Contains mild language**: No
+- **Contains strong language**: No
+
+### Controlled Substances
+- **Contains references to alcohol, tobacco, or drugs**: No
+- **Contains alcohol, tobacco, or drug use**: No
+
+### Miscellaneous
+- **Contains gambling themes or content**: No
+- **Contains user-to-user interactions or sharing**: No
+- **Contains user-generated content**: No
+- **Contains simulated gambling**: No
+- **Contains educational content**: Yes (memory training)
+- **Contains medical or health information**: No
+
+## Expected Content Rating
+Based on the responses above, GridRecall would likely receive the following content rating:
+
+- **ESRB**: Everyone (E)
+- **PEGI**: 3+
+- **Google Play**: Everyone
+
+## Additional Notes
+GridRecall is a memory training game suitable for all ages. It contains no objectionable content and is designed to be accessible and appropriate for users of all ages, including children. The game focuses on cognitive skills development through pattern memorization and sequence recall exercises.

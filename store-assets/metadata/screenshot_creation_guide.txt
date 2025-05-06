@@ -1,0 +1,206 @@
+# GridRecall: Screenshot Creation Guide for Google Play Store
+
+This guide outlines the process for creating high-quality screenshots of GridRecall for the Google Play Store listing.
+
+## Overview
+
+Since GridRecall is currently a web application that will be wrapped in a WebView for Android, we need to create screenshots that accurately represent how the app will look on mobile devices. This guide provides instructions for creating professional-looking screenshots that showcase the app's features and UI.
+
+## Required Screenshot Types
+
+As specified in `screenshot_specifications.txt`, we need:
+
+1. **Phone Screenshots (Required)**
+   - Format: JPEG or 24-bit PNG (no alpha)
+   - Recommended dimensions: 1080 x 1920 pixels (9:16)
+   - Quantity: 2-8 screenshots
+
+2. **Tablet Screenshots (Optional but Recommended)**
+   - Format: JPEG or 24-bit PNG (no alpha)
+   - Recommended dimensions: 
+     - 7-inch: 1080 x 1920 pixels (9:16)
+     - 10-inch: 1920 x 1200 pixels or 2560 x 1600 pixels
+   - Quantity: 2-8 screenshots per size
+
+## Screenshot Creation Methods
+
+### Method 1: Using Device Frames (Recommended)
+
+This method involves capturing the web app in a browser and then placing the screenshots inside device frames.
+
+#### Tools Needed:
+- Browser (Chrome recommended for mobile emulation)
+- Image editing software (Photoshop, GIMP, Figma, etc.)
+- Device frame templates (available online)
+
+#### Steps:
+
+1. **Capture Raw Screenshots**
+   - Open Chrome DevTools (F12 or Ctrl+Shift+I)
+   - Click the "Toggle Device Toolbar" button (Ctrl+Shift+M)
+   - Select a mobile device preset (e.g., Pixel 5)
+   - Set the app to the desired state (e.g., main screen, grid selection, etc.)
+   - Capture screenshot (In DevTools: ⋮ menu > "Capture screenshot")
+   - Repeat for all required app states
+
+2. **Apply Device Frames**
+   - Open your image editing software
+   - Import a device frame template
+   - Place your raw screenshot inside the device frame
+   - Adjust as needed to fit properly
+   - Export as PNG or JPEG at the required dimensions
+
+3. **Add Text Overlays (Optional)**
+   - Add short, descriptive text highlighting the feature shown
+   - Use consistent font, size, and positioning across all screenshots
+   - Keep text brief and focused on key benefits
+
+### Method 2: Using Android Emulator
+
+If you've already created the Android WebView wrapper, you can use the Android Emulator for more authentic screenshots.
+
+#### Tools Needed:
+- Android Studio
+- Android Emulator with appropriate device configuration
+- Screenshot tool (built into Android Studio)
+
+#### Steps:
+
+1. **Set Up Emulator**
+   - Open Android Studio
+   - Launch AVD Manager
+   - Create or select a virtual device (e.g., Pixel 5 with Play Store)
+   - Start the emulator
+
+2. **Install and Run App**
+   - Build and install your app on the emulator
+   - Navigate to the desired screens
+
+3. **Capture Screenshots**
+   - Use the screenshot button in the emulator controls
+   - Or press Ctrl+S in the emulator window
+   - Repeat for all required app states
+
+4. **Enhance Screenshots (Optional)**
+   - Import into image editing software
+   - Adjust brightness/contrast if needed
+   - Add text overlays highlighting features
+   - Export at the required dimensions
+
+### Method 3: Using Online Mockup Tools
+
+Several online tools allow you to create device mockups without advanced design skills.
+
+#### Recommended Tools:
+- [Smartmockups](https://smartmockups.com/)
+- [MockuPhone](https://mockuphone.com/)
+- [DeviceShots](https://deviceshots.com/)
+- [AppLaunchpad](https://theapplaunchpad.com/)
+
+#### Steps:
+
+1. **Capture Raw Screenshots**
+   - Follow the same process as Method 1 to capture raw screenshots
+
+2. **Upload to Mockup Tool**
+   - Select a device frame that matches Google Play requirements
+   - Upload your screenshot
+   - Adjust as needed
+   - Download the final mockup
+
+## Required Screenshots for GridRecall
+
+Create the following screenshots to showcase key features:
+
+1. **Main Game Screen**
+   - Show the 3x3 grid with some buttons highlighted
+   - Demonstrate the clean, modern UI
+   - Highlight the glass effect design
+
+2. **Grid Size Selection**
+   - Show the grid size selector dropdown open
+   - Demonstrate the customization options
+
+3. **Sequence Playback**
+   - Show the playback controls with play button highlighted
+   - Include a sequence in progress (some buttons highlighted)
+
+4. **Step Navigation**
+   - Show the step indicator with a sequence in progress
+   - Highlight the current step / total steps display
+
+5. **Reset Function**
+   - Show the reset button being pressed or highlighted
+   - Demonstrate the clear visual feedback
+
+6. **Responsive Design (Tablet)**
+   - Show how the app adapts to larger screens
+   - Highlight the spacious layout on tablets
+
+## Design Guidelines
+
+### Visual Consistency
+
+- Use the same device frame for all phone screenshots
+- Maintain consistent lighting and background
+- Use the same text style for all annotations
+- Keep a consistent color scheme aligned with app branding
+
+### Text Overlays
+
+If adding text overlays to highlight features:
+
+- Keep text brief and benefit-focused
+- Use a clear, readable font
+- Position text consistently across screenshots
+- Use the app's color scheme (teal accent color)
+- Ensure text doesn't obscure important UI elements
+
+### Background Elements
+
+- Consider adding a subtle branded background behind device frames
+- Use the app's color scheme (dark blue/black with teal accents)
+- Don't make backgrounds too busy or distracting
+
+## File Naming Convention
+
+Use this naming convention for organization:
+
+- `gridrecall_phone_01_main_screen.png`
+- `gridrecall_phone_02_grid_selection.png`
+- `gridrecall_phone_03_playback.png`
+- `gridrecall_phone_04_step_navigation.png`
+- `gridrecall_phone_05_reset.png`
+- `gridrecall_tablet7_01_main_screen.png`
+- `gridrecall_tablet10_01_main_screen.png`
+
+## Quality Checklist
+
+Before finalizing screenshots:
+
+- [ ] All screenshots meet Google Play size requirements
+- [ ] UI elements are clearly visible and not cut off
+- [ ] Text is readable and free of spelling/grammar errors
+- [ ] Images are sharp and not pixelated
+- [ ] Consistent visual style across all screenshots
+- [ ] Key features are highlighted effectively
+- [ ] No sensitive/personal information is visible
+- [ ] Device frames are consistent (if used)
+- [ ] File sizes are optimized for web
+
+## Additional Tips
+
+- **Show Real Usage**: Capture screenshots that show the app in use with realistic data
+- **Highlight Unique Features**: Focus on what makes GridRecall special
+- **Consider Localization**: If planning to release in multiple languages, create separate screenshots for each language
+- **Test Different Devices**: Check how screenshots look on various screen sizes
+- **Get Feedback**: Have others review your screenshots before submission
+- **Check Competitors**: Look at similar apps for inspiration (but don't copy)
+
+## Resources for Device Frames and Mockups
+
+- [Facebook Design](https://design.facebook.com/toolsandresources/devices/)
+- [Pixeden](https://www.pixeden.com/psd-mock-up-templates)
+- [Mockup World](https://www.mockupworld.co/free/category/iphone/)
+- [Freepik](https://www.freepik.com/free-photos-vectors/phone-mockup)
+- [Behance](https://www.behance.net/search/projects?search=free%20device%20mockup)

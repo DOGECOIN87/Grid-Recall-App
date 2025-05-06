@@ -1,0 +1,89 @@
+# GridRecall Icon & Graphics Specifications for Google Play Store
+
+## App Icon Requirements
+
+### High-Resolution App Icon (Required)
+- **Format**: 32-bit PNG (with alpha)
+- **Dimensions**: 512 x 512 pixels
+- **Max File Size**: 1024KB
+- **Purpose**: Main app icon displayed in Google Play Store
+
+### App Icon Design Guidelines
+- Create a distinctive, memorable icon that represents the app's purpose
+- Use a simple, clean design that's recognizable at small sizes
+- Avoid text in the icon (the app name will appear separately)
+- Use a consistent light source and shadows
+- Ensure the icon works well on both light and dark backgrounds
+- Follow Material Design principles for a modern look
+- Avoid using photos or screenshots as icons
+- Don't include Google Play badges, store ranking, or promotional content
+
+### Recommended App Icon Design for GridRecall
+- **Concept**: A stylized grid with highlighted cells forming a pattern
+- **Color Scheme**: Use the app's teal accent color (#00AAAA) with dark background
+- **Style**: Modern, minimalist design with subtle depth effects
+- **Shape**: Follow the Google Play adaptive icon guidelines with a distinctive foreground element
+
+## Feature Graphic Requirements
+
+### Feature Graphic (Required)
+- **Format**: JPEG or 24-bit PNG (no alpha)
+- **Dimensions**: 1024 x 500 pixels
+- **Purpose**: Displayed at the top of your app listing page in the Google Play Store
+
+### Feature Graphic Design Guidelines
+- Create an eye-catching graphic that represents your app's brand and purpose
+- Ensure the graphic looks good on both light and dark backgrounds
+- Don't include important visual elements near the edges (safe zone is center 80%)
+- Avoid excessive text - the app name and developer name will appear over this graphic
+- Don't include device frames, screenshots, or app UI elements
+- Don't include Google Play badges, store ranking, or promotional content
+- Ensure any text is large enough to be readable
+
+### Recommended Feature Graphic Design for GridRecall
+- **Concept**: Abstract representation of memory/sequence patterns with grid elements
+- **Color Scheme**: Gradient background using the app's color palette (dark blue to black with teal accents)
+- **Text**: "GridRecall" in large, clear typography with a subtle glow effect
+- **Visual Elements**: Abstract grid patterns or memory-related imagery
+- **Style**: Clean, modern design consistent with the app's UI aesthetics
+
+## Promo Graphic Requirements (Optional)
+
+### Promo Graphic
+- **Format**: JPEG or 24-bit PNG (no alpha)
+- **Dimensions**: 180 x 120 pixels
+- **Purpose**: Used in various places on Google Play
+
+### Promo Graphic Design Guidelines
+- Create a smaller version of your feature graphic with similar styling
+- Ensure any text is readable at this smaller size
+- Maintain brand consistency with other promotional materials
+
+## TV Banner Requirements (If applicable)
+
+### TV Banner
+- **Format**: JPEG or 24-bit PNG (no alpha)
+- **Dimensions**: 1280 x 720 pixels
+- **Purpose**: Displayed in the Android TV interface
+
+### TV Banner Design Guidelines
+- Design for viewing from 10 feet away on a TV screen
+- Use large, readable text
+- Place important elements in the center 90% of the image
+- Avoid small details that won't be visible from a distance
+
+## Design Consistency
+
+Maintain visual consistency across all assets:
+- Use the same color palette throughout
+- Keep typography consistent
+- Ensure the brand identity is clear and recognizable
+- Follow the same design language and style
+
+## File Naming Convention
+
+Use a consistent naming convention for easy organization:
+- `gridrecall_icon_512.png`
+- `gridrecall_feature_graphic.png`
+- `gridrecall_promo_graphic.png`
+- `gridrecall_tv_banner.png` (if applicable)

@@ -20,8 +20,8 @@ interface PlaybackControlsProps { // Renamed interface
 export function PlaybackControls({ isPlaying, onPlay, onPause, onStop, disabled = false }: PlaybackControlsProps) {
   return (
     <TooltipProvider>
-      <div className="flex items-center justify-center gap-2 md:gap-3">
-        {/* Play/Pause Button */}
+      <div className="flex items-center justify-center gap-3 md:gap-4 p-1 rounded-full bg-background/30 backdrop-blur-md border border-white/10 shadow-inner">
+        {/* Play/Pause Button with enhanced styling */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -29,22 +29,30 @@ export function PlaybackControls({ isPlaying, onPlay, onPause, onStop, disabled 
               variant="outline"
               size="icon"
               className={cn(
-                'bg-background hover:bg-accent hover:text-accent-foreground border-border/70',
-                disabled && 'opacity-40 cursor-not-allowed'
+                'bg-background/50 backdrop-blur-sm border-white/20 shadow-md transition-all duration-300',
+                'hover:shadow-lg hover:-translate-y-0.5',
+                isPlaying 
+                  ? 'bg-accent/20 hover:bg-accent/30 text-accent-foreground ring-2 ring-accent/50' // Playing state with ring
+                  : 'hover:bg-accent/20 hover:text-accent-foreground hover:ring-2 hover:ring-accent/30', // Ready to play state
+                'rounded-full', // Make buttons perfectly round
+                disabled && 'opacity-40 cursor-not-allowed hover:translate-y-0 hover:shadow-md'
               )}
               disabled={disabled}
               aria-label={isPlaying ? 'Pause Playback' : 'Play Sequence'}
               aria-disabled={disabled}
             >
-              {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+              {isPlaying 
+                ? <Pause className="h-5 w-5 animate-pulse" /> 
+                : <Play className="h-5 w-5" />
+              }
             </Button>
           </TooltipTrigger>
-          <TooltipContent side="bottom">
+          <TooltipContent side="bottom" className="glass-effect border border-white/10 shadow-lg">
             <p>{isPlaying ? 'Pause Playback' : 'Play Sequence'}</p>
           </TooltipContent>
         </Tooltip>
 
-        {/* Stop Button */}
+        {/* Stop Button with enhanced styling */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -52,9 +60,11 @@ export function PlaybackControls({ isPlaying, onPlay, onPause, onStop, disabled 
               variant="outline"
               size="icon"
               className={cn(
-                'bg-background hover:bg-destructive/10 hover:text-destructive border-border/70',
-                 // Disable only if sequence is empty, allow stop even during playback
-                (disabled && !isPlaying) && 'opacity-40 cursor-not-allowed'
+                'bg-background/50 backdrop-blur-sm border-white/20 shadow-md transition-all duration-300',
+                'hover:shadow-lg hover:-translate-y-0.5',
+                'hover:bg-destructive/20 hover:text-destructive hover:border-destructive/30 hover:ring-2 hover:ring-destructive/30',
+                'rounded-full', // Make buttons perfectly round
+                (disabled && !isPlaying) && 'opacity-40 cursor-not-allowed hover:translate-y-0 hover:shadow-md'
               )}
               disabled={disabled && !isPlaying}
               aria-label="Stop Playback and Reset"
@@ -63,9 +73,9 @@ export function PlaybackControls({ isPlaying, onPlay, onPause, onStop, disabled 
               <Square className="h-5 w-5" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent side="bottom">
-             <p>Stop Playback & Reset</p>
-           </TooltipContent>
+          <TooltipContent side="bottom" className="glass-effect border border-white/10 shadow-lg">
+            <p>Stop Playback & Reset</p>
+          </TooltipContent>
         </Tooltip>
       </div>
     </TooltipProvider>

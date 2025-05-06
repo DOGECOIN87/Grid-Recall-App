@@ -1,0 +1,43 @@
+# GridRecall - Memory Training Game
+
+## Short Description (80 characters max)
+Train your memory with GridRecall - a visual sequence memorization game.
+
+## Full Description (4000 characters max)
+# GridRecall: Enhance Your Memory Skills
+
+GridRecall is an elegant memory training game designed to help you improve your visual memory and sequence recall abilities. With its sleek, modern interface and engaging gameplay, GridRecall offers a fun and effective way to exercise your brain.
+
+## How to Play
+1. Select your preferred grid size from multiple options (3x3 to 5x6)
+2. Create sequences by tapping buttons in any order you choose
+3. Use the playback controls to review and memorize your patterns
+4. Challenge yourself to recall longer and more complex sequences
+
+## Key Features
+• **Customizable Grid Sizes**: Choose from 12 different grid configurations to match your skill level
+• **Elegant User Interface**: Enjoy a visually appealing design with smooth animations and glass-like effects
+• **Step-by-Step Playback**: Review your sequences at your own pace with intuitive playback controls
+• **Progress Tracking**: Monitor your current step and total sequence length
+• **Responsive Design**: Play seamlessly on any device - phone, tablet, or desktop
+
+## Benefits of Memory Training
+Regular memory exercises like GridRecall can help:
+• Improve concentration and focus
+• Enhance pattern recognition skills
+• Boost working memory capacity
+• Provide mental stimulation for brain health
+• Develop better recall abilities for everyday tasks
+
+GridRecall is perfect for users of all ages looking to sharpen their memory in an enjoyable way. Whether you're a student preparing for exams, a professional wanting to stay mentally sharp, or a senior interested in cognitive exercises, GridRecall offers an accessible and engaging memory workout.
+
+Start training your memory today with GridRecall!
+
+## Tags
+memory game, brain training, sequence recall, pattern memory, cognitive exercise, memory improvement, brain game, memory challenge
+
+## What's New (for updates)
+• Enhanced visual design with modern glass effects
+• Improved animations and visual feedback
+• Optimized performance across all devices
+• Added new grid size options

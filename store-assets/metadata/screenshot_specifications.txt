@@ -1,0 +1,86 @@
+# GridRecall Screenshot Specifications for Google Play Store
+
+## Screenshot Requirements
+
+Google Play Store requires screenshots in the following formats:
+
+### Phone Screenshots (Required)
+- **Format**: JPEG or 24-bit PNG (no alpha)
+- **Minimum Dimension**: 320px
+- **Maximum Dimension**: 3840px
+- **Aspect Ratio**: Any, but 16:9 is recommended for most devices
+- **Quantity**: 2-8 screenshots
+
+### 7-inch Tablet Screenshots (Optional)
+- **Format**: JPEG or 24-bit PNG (no alpha)
+- **Minimum Dimension**: 320px
+- **Maximum Dimension**: 3840px
+- **Aspect Ratio**: Any, but 16:9 is recommended for most devices
+- **Quantity**: 2-8 screenshots
+
+### 10-inch Tablet Screenshots (Optional)
+- **Format**: JPEG or 24-bit PNG (no alpha)
+- **Minimum Dimension**: 320px
+- **Maximum Dimension**: 3840px
+- **Aspect Ratio**: Any, but 16:9 is recommended for most devices
+- **Quantity**: 2-8 screenshots
+
+### TV Screenshots (Optional, if applicable)
+- **Format**: JPEG or 24-bit PNG (no alpha)
+- **Minimum Dimension**: 320px
+- **Maximum Dimension**: 3840px
+- **Aspect Ratio**: 16:9
+- **Quantity**: 2-8 screenshots
+
+### Wear OS Screenshots (Optional, if applicable)
+- **Format**: JPEG or 24-bit PNG (no alpha)
+- **Minimum Dimension**: 320px
+- **Maximum Dimension**: 3840px
+- **Aspect Ratio**: Square
+- **Quantity**: 2-8 screenshots
+
+## Recommended Screenshot Dimensions
+
+For optimal display across devices:
+
+- **Phone**: 1080 x 1920 pixels (9:16)
+- **7-inch Tablet**: 1080 x 1920 pixels (9:16) or 1200 x 1920 pixels
+- **10-inch Tablet**: 1920 x 1200 pixels or 2560 x 1600 pixels
+- **TV**: 1920 x 1080 pixels (16:9)
+- **Wear OS**: 512 x 512 pixels (1:1)
+
+## Screenshot Content Guidelines
+
+### Required Screenshots for GridRecall
+
+1. **Main Game Screen**: Show the grid with some buttons highlighted
+2. **Grid Size Selection**: Display the grid size selector dropdown
+3. **Sequence Playback**: Capture the playback controls in action
+4. **Step Navigation**: Show the step indicator with a sequence in progress
+
+### Best Practices
+
+- Use real app screenshots, not mockups
+- Don't include device frames unless they're part of a promotional image
+- Ensure text is readable and clear
+- Avoid covering important UI elements with overlaid text
+- Use consistent styling across all screenshots
+- Highlight one key feature per screenshot
+- Consider adding brief text callouts to explain features
+- Ensure screenshots are visually appealing and showcase the app's design
+
+## Localization Considerations
+
+If planning to release in multiple languages:
+- Create separate screenshots for each supported language
+- Ensure any text overlays are properly translated
+- Maintain consistent visual style across all localized screenshots
+
+## File Naming Convention
+
+Use a consistent naming convention for easy organization:
+- `gridrecall_phone_[number]_[feature].png`
+- `gridrecall_tablet7_[number]_[feature].png`
+- `gridrecall_tablet10_[number]_[feature].png`
+
+Example: `gridrecall_phone_01_main_screen.png`

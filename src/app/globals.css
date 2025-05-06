@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
 }
 
 @layer base {
@@ -43,30 +43,30 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background: 0 0% 15%; /* Slightly darker Gray Background */
-    --foreground: 0 0% 95%; /* Slightly brighter Light Gray Foreground */
-    --card: 0 0% 18%; /* Dark Gray Card, slightly lighter than bg */
-    --card-foreground: 0 0% 95%; /* Light Gray Card Foreground */
-    --popover: 0 0% 12%; /* Darker Popover */
-    --popover-foreground: 0 0% 95%; /* Light Gray Popover Foreground */
-    --primary: 0 0% 98%; /* Almost White Primary */
-    --primary-foreground: 0 0% 9%; /* Dark Gray Primary Foreground */
-    --secondary: 0 0% 22%; /* Slightly lighter gray Secondary */
-    --secondary-foreground: 0 0% 95%; /* Light Gray Secondary Foreground */
-    --muted: 0 0% 25%; /* Slightly lighter gray Muted */
-    --muted-foreground: 0 0% 65%; /* Brighter Dim Gray Muted Foreground */
-    --accent: 180 100% 30.1%; /* Slightly darker Teal Accent */
-    --accent-foreground: 0 0% 98%; /* Light text on Accent */
-    --destructive: 0 70% 45%; /* Adjusted destructive */
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 30%; /* Subtle border color */
-    --input: 0 0% 28%; /* Input background */
-    --ring: 180 100% 35.1%; /* Teal Ring */
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: 222 47% 11%; /* Rich dark blue background */
+    --foreground: 210 40% 98%; /* Bright white-blue foreground */
+    --card: 224 71% 4%; /* Dark card background with blue tint */
+    --card-foreground: 213 31% 91%; /* Light blue-white card text */
+    --popover: 224 71% 4%; /* Match card for consistency */
+    --popover-foreground: 215 20% 95%; /* Light text for popover */
+    --primary: 210 40% 98%; /* Bright primary color */
+    --primary-foreground: 222 47% 11%; /* Dark text on primary */
+    --secondary: 217 33% 17%; /* Rich secondary color */
+    --secondary-foreground: 210 40% 98%; /* Light text on secondary */
+    --muted: 215 27% 16%; /* Subtle muted background */
+    --muted-foreground: 215 20% 65%; /* Visible but subdued text */
+    --accent: 176 100% 39%; /* Vibrant teal accent */
+    --accent-foreground: 210 40% 98%; /* Light text on accent */
+    --destructive: 0 84% 60%; /* Clear destructive red */
+    --destructive-foreground: 210 40% 98%; /* Light text on destructive */
+    --border: 217 33% 17%; /* Subtle border color */
+    --input: 217 33% 17%; /* Input background */
+    --ring: 176 100% 39%; /* Teal ring to match accent */
+    --chart-1: 191 97% 77%; /* Cyan */
+    --chart-2: 271 91% 65%; /* Purple */
+    --chart-3: 31 100% 65%; /* Orange */
+    --chart-4: 338 85% 67%; /* Pink */
+    --chart-5: 130 90% 65%; /* Green */
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -84,22 +84,87 @@ body {
     @apply border-border;
   }
   body {
-     /* Apply background texture */
-    @apply bg-[url('/images/background-texture.png')] bg-repeat bg-fixed text-foreground;
+    /* Apply background texture with gradient overlay */
+    @apply bg-gradient-to-br from-background to-background/95 bg-fixed text-foreground;
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(var(--accent)/5%) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, hsl(var(--accent)/5%) 0%, transparent 50%),
+      url('/images/background-texture.svg');
   }
 
   /* Enhance focus rings for accessibility and style */
   *:focus-visible {
      @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
+  
+  /* Improved heading styles */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+  
+  /* Improved link styles */
+  a {
+    @apply text-accent hover:text-accent/80 transition-colors;
+  }
 }
 
-/* Custom utility for subtle text shadow */
+/* Custom utilities for enhanced visual effects */
 @layer utilities {
+  /* Text effects */
   .text-shadow-sm {
     text-shadow: 0 1px 2px hsl(var(--foreground) / 0.1);
   }
   .dark .text-shadow-sm {
-    text-shadow: 0 1px 2px hsl(var(--background) / 0.2);
+    text-shadow: 0 1px 3px hsl(var(--background) / 0.3);
+  }
+  
+  .text-glow {
+    text-shadow: 0 0 5px hsl(var(--accent) / 0.5);
+  }
+  
+  /* Card and element effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1;
+  }
+  
+  .glass-effect {
+    @apply bg-background/30 backdrop-blur-md border border-white/10;
+  }
+  
+  .inner-glow {
+    box-shadow: inset 0 0 20px hsl(var(--accent) / 0.15);
+  }
+  
+  .button-glow {
+    box-shadow: 0 0 15px hsl(var(--accent) / 0.4);
+  }
+  
+  /* Animation utilities */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 }

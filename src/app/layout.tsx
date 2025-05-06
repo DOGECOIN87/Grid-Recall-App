@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark"> {/* Apply dark theme by default */}
+    <html lang="en" className="dark">{/* Apply dark theme by default */}
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
@@ -25,7 +25,7 @@ export default function RootLayout({
         )}
       >
         {children}
-        <Toaster /> {/* Add Toaster for notifications */}
+        <Toaster />{/* Add Toaster for notifications */}
       </body>
     </html>
   );

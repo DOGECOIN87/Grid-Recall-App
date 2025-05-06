@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 
 interface GridConfiguratorProps {
   gridSize: GridSize;
@@ -24,27 +25,46 @@ const gridSizes: GridSize[] = [
 
 export function GridConfigurator({ gridSize, onGridSizeChange }: GridConfiguratorProps) {
   return (
-    <div className="flex items-center gap-2">
-      <Label htmlFor="grid-size-select" className="text-sm font-medium text-foreground/80 whitespace-nowrap">
-        Grid Size:
+    <div className="flex items-center gap-3 bg-background/30 backdrop-blur-md rounded-full px-3 py-1.5 border border-white/10 shadow-inner">
+      <Label 
+        htmlFor="grid-size-select" 
+        className="text-sm font-semibold text-foreground/90 whitespace-nowrap px-3 py-1.5 rounded-full bg-accent/10 shadow-sm"
+      >
+        Grid Size
       </Label>
       <Select
         value={gridSize}
         onValueChange={(value: GridSize) => onGridSizeChange(value)}
       >
-        {/* Use a slightly elevated trigger for better visual separation */}
+        {/* Enhanced select trigger with glass effect */}
         <SelectTrigger
           id="grid-size-select"
-          className="w-[100px] h-10 bg-background shadow-sm border-border/70 focus:ring-2 focus:ring-ring focus:ring-offset-0"
+          className="w-[100px] h-10 glass-effect border-white/20 shadow-md focus:ring-2 focus:ring-accent/50 focus:ring-offset-1 transition-all duration-300 rounded-full"
         >
           <SelectValue placeholder="Select size" />
         </SelectTrigger>
-        <SelectContent className="bg-popover text-popover-foreground shadow-lg border-border/50">
-          {gridSizes.map((size) => (
-            <SelectItem key={size} value={size} className="focus:bg-accent focus:text-accent-foreground">
-              {size}
-            </SelectItem>
-          ))}
+        
+        {/* Enhanced select content with glass effect */}
+        <SelectContent 
+          className="glass-effect border border-white/10 shadow-lg backdrop-blur-md"
+          position="popper"
+          sideOffset={5}
+        >
+          <div className="grid grid-cols-4 gap-1 p-1">
+            {gridSizes.map((size) => (
+              <SelectItem 
+                key={size} 
+                value={size} 
+                className={cn(
+                  "focus:bg-accent/20 focus:text-accent-foreground rounded-md text-center transition-all duration-200",
+                  "data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground data-[state=checked]:font-semibold",
+                  gridSize === size ? "bg-accent/20" : "hover:bg-accent/10"
+                )}
+              >
+                {size}
+              </SelectItem>
+            ))}
+          </div>
         </SelectContent>
       </Select>
     </div>

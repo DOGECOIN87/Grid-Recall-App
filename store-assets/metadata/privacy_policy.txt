@@ -1,0 +1,51 @@
+# GridRecall Privacy Policy
+
+Effective Date: May 6, 2025
+
+## Introduction
+
+Welcome to GridRecall. We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you use our application and tell you about your privacy rights and how the law protects you.
+
+## Data We Collect
+
+GridRecall is designed with privacy in mind. Our app:
+
+- **Does not collect personal information**: We do not request, store, or process any personally identifiable information.
+- **Does not require user accounts**: You can use the app without creating an account or providing any personal details.
+- **Does not track your location**: We do not access or store your geographical location.
+- **Does not use cookies**: We do not use cookies or similar tracking technologies.
+- **Does not collect usage data**: We do not collect analytics about how you use the app.
+
+## Local Storage
+
+GridRecall may store the following information locally on your device:
+
+- Game preferences (such as grid size settings)
+- Game progress and scores
+
+This information is stored only on your device and is not transmitted to our servers or any third parties.
+
+## App Permissions
+
+GridRecall requires minimal permissions to function:
+
+- **Storage**: Only to save your game preferences and progress locally on your device.
+
+## Children's Privacy
+
+Our app does not collect personal information from anyone, including children under the age of 13.
+
+## Changes to This Privacy Policy
+
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Effective Date" at the top.
+
+## Contact Us
+
+If you have any questions about this Privacy Policy, please contact us at:
+
+- Email: support@gridrecall.com
+- Website: www.gridrecall.com/contact
+
+## Consent
+
+By using our app, you consent to our Privacy Policy and agree to its terms.

@@ -144,21 +144,29 @@ export function ButtonGrid({ rows, cols, sequence, currentStep, onButtonClick, d
                 <Button
                   variant={variant}
                   className={cn(
-                    'relative aspect-square w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full text-lg font-semibold transition-all duration-150 ease-in-out focus:ring-4 focus:ring-ring focus:ring-offset-2',
-                    'flex items-center justify-center p-1 overflow-visible shadow-md', // Added shadow-md
-                    // Style based on whether the step has passed or not
-                    variant === 'secondary' && 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg', // Passed steps
-                    variant === 'outline' && 'border-border/50 text-muted-foreground bg-transparent hover:bg-muted/50', // Future steps in review
-                    variant === 'default' && 'bg-secondary text-secondary-foreground hover:bg-secondary/80', // Default/unused
-                    // Highlight the button corresponding to the current step number being shown
-                    isCurrentStepButton && 'ring-4 ring-offset-2 ring-ring/80 shadow-xl scale-105 border-2 border-primary', // Make current step pop
-                    'active:scale-95',
-                    disabled && 'opacity-70 cursor-not-allowed pointer-events-none shadow-inner' // Style for disabled state
+                    'relative aspect-square w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full text-lg font-semibold transition-all duration-300 ease-out',
+                    'flex items-center justify-center p-1 overflow-visible shadow-lg', 
+                    // Enhanced styling based on button state
+                    variant === 'secondary' && 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-xl button-glow', // Passed steps with glow
+                    variant === 'outline' && 'border-white/20 text-muted-foreground bg-muted/10 backdrop-blur-sm hover:bg-muted/30 hover:border-white/30', // Future steps with glass effect
+                    variant === 'default' && 'bg-secondary/80 text-secondary-foreground hover:bg-secondary/90 backdrop-blur-sm', // Default with glass effect
+                    // Enhanced highlight for current step
+                    isCurrentStepButton && 'ring-4 ring-offset-4 ring-accent/80 shadow-2xl scale-110 border-2 border-accent animate-pulse-slow', 
+                    'hover:scale-105 active:scale-95 focus:ring-4 focus:ring-ring focus:ring-offset-2',
+                    // Glass effect for all buttons
+                    'before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/10 before:to-transparent before:opacity-50 before:pointer-events-none',
+                    // Inner shadow for depth
+                    'after:absolute after:inset-0 after:rounded-full after:shadow-inner after:pointer-events-none',
+                    // Enhanced glow effect on hover
+                    'hover:shadow-[0_0_15px_rgba(0,200,200,0.5)]',
+                    // Improved active state
+                    'active:shadow-[inset_0_0_10px_rgba(0,0,0,0.3)]',
+                    disabled && 'opacity-70 cursor-not-allowed pointer-events-none shadow-inner filter grayscale' // Enhanced disabled state
                   )}
-                  onClick={() => !disabled && onButtonClick(index)} // Only allow click if not disabled
+                  onClick={() => !disabled && onButtonClick(index)}
                   aria-label={`Grid button ${index + 1}${allSequenceNumbers.length > 0 ? `, pressed at steps ${sequenceString}` : ''}`}
-                  disabled={disabled} // Apply disabled prop
-                  aria-pressed={visibleSequenceNumbers.length > 0} // Indicate if pressed in the current view
+                  disabled={disabled}
+                  aria-pressed={visibleSequenceNumbers.length > 0}
                 >
                   {/* Render Inner Step Numbers (1-12) */}
                   {positionedInnerNumbers.map(({ stepNumber, positionIndex }) => (

@@ -1,0 +1,74 @@
+# GridRecall Features & Highlights
+
+## Core Features
+
+### 1. Customizable Grid Sizes
+- Multiple grid configurations from 3x3 to 5x6
+- 12 different size options to match player skill level
+- Ability to change grid size at any time
+
+### 2. Sequence Creation & Playback
+- Create custom sequences by tapping grid buttons
+- Step-by-step playback with pause/resume functionality
+- Visual highlighting of current step during playback
+- Manual navigation through sequence steps
+
+### 3. Modern UI Design
+- Sleek, glass-effect interface with subtle animations
+- Dark mode optimized for reduced eye strain
+- Responsive design that works on all screen sizes
+- Subtle visual feedback for all interactions
+
+### 4. Accessibility
+- High contrast visual indicators
+- Clear, readable text and icons
+- Keyboard navigation support
+- Screen reader compatible elements
+
+## User Benefits
+
+### 1. Cognitive Development
+- Improves short-term memory capacity
+- Enhances visual-spatial memory
+- Develops pattern recognition skills
+- Strengthens concentration and focus
+
+### 2. Engaging Experience
+- Simple yet challenging gameplay
+- Progressive difficulty based on user-created sequences
+- Satisfying visual and interactive feedback
+- Quick sessions perfect for short breaks
+
+### 3. Educational Value
+- Suitable for all ages from children to seniors
+- Helps develop memory techniques
+- Provides mental exercise in an enjoyable format
+- Supports cognitive maintenance for older adults
+
+## Technical Highlights
+
+### 1. Performance
+- Lightweight application with fast loading times
+- Smooth animations even on older devices
+- Minimal battery usage
+- Small app size
+
+### 2. Privacy-Focused
+- No personal data collection
+- No internet connection required
+- No advertisements
+- No in-app purchases
+
+### 3. Regular Updates
+- New features based on user feedback
+- Performance optimizations
+- UI refinements
+- Additional grid configurations
+
+## Marketing Taglines
+
+- "Train Your Brain, One Sequence at a Time"
+- "Remember More with GridRecall"
+- "Boost Your Memory in Minutes a Day"
+- "The Elegant Way to Sharpen Your Mind"
+- "Challenge Your Memory, Enhance Your Focus"
