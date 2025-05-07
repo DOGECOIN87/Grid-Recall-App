@@ -10,7 +10,7 @@ body {
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
+    --card: 0 0% 100%; /* Adjusted for transparency, see .dark */
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
@@ -43,39 +43,39 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background: 222 47% 11%; /* Rich dark blue background */
-    --foreground: 210 40% 98%; /* Bright white-blue foreground */
-    --card: 224 71% 4%; /* Dark card background with blue tint */
-    --card-foreground: 213 31% 91%; /* Light blue-white card text */
-    --popover: 224 71% 4%; /* Match card for consistency */
-    --popover-foreground: 215 20% 95%; /* Light text for popover */
-    --primary: 210 40% 98%; /* Bright primary color */
-    --primary-foreground: 222 47% 11%; /* Dark text on primary */
-    --secondary: 217 33% 17%; /* Rich secondary color */
-    --secondary-foreground: 210 40% 98%; /* Light text on secondary */
-    --muted: 215 27% 16%; /* Subtle muted background */
-    --muted-foreground: 215 20% 65%; /* Visible but subdued text */
-    --accent: 176 100% 39%; /* Vibrant teal accent */
-    --accent-foreground: 210 40% 98%; /* Light text on accent */
-    --destructive: 0 84% 60%; /* Clear destructive red */
-    --destructive-foreground: 210 40% 98%; /* Light text on destructive */
-    --border: 217 33% 17%; /* Subtle border color */
-    --input: 217 33% 17%; /* Input background */
-    --ring: 176 100% 39%; /* Teal ring to match accent */
-    --chart-1: 191 97% 77%; /* Cyan */
-    --chart-2: 271 91% 65%; /* Purple */
-    --chart-3: 31 100% 65%; /* Orange */
-    --chart-4: 338 85% 67%; /* Pink */
-    --chart-5: 130 90% 65%; /* Green */
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-    --radius: 0.75rem; /* Match light mode radius */
+    --background: 20 0% 13%; /* Dark Gray #333333 */
+    --foreground: 0 0% 93.3%; /* Light Gray #EEEEEE */
+    --card: 20 0% 13% / 0.8; /* Dark Gray #333333 with 80% opacity for card to show background */
+    --card-foreground: 0 0% 93.3%; /* Light Gray #EEEEEE for card text */
+    --popover: 20 0% 10%; /* Slightly darker popover */
+    --popover-foreground: 0 0% 93.3%;
+    --primary: 180 100% 25.1%; /* Teal Accent as primary */
+    --primary-foreground: 0 0% 98%; /* Light text on Accent */
+    --secondary: 0 0% 20%; /* Darker gray for secondary elements */
+    --secondary-foreground: 0 0% 93.3%;
+    --muted: 0 0% 25%; /* Muted gray */
+    --muted-foreground: 0 0% 60%; /* Muted foreground */
+    --accent: 180 100% 25.1%; /* Teal Accent #008080 */
+    --accent-foreground: 0 0% 98%; /* Light text on Accent */
+    --destructive: 0 70% 50%; /* Softer destructive red */
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 25%; /* Border color matching muted */
+    --input: 0 0% 20%; /* Input background matching secondary */
+    --ring: 180 100% 35.1%; /* Brighter Teal Ring for focus */
+    --chart-1: 191 97% 77%;
+    --chart-2: 271 91% 65%;
+    --chart-3: 31 100% 65%;
+    --chart-4: 338 85% 67%;
+    --chart-5: 130 90% 65%;
+    --sidebar-background: 20 0% 10%;
+    --sidebar-foreground: 0 0% 93.3%;
+    --sidebar-primary: 180 100% 25.1%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 20 0% 15%;
+    --sidebar-accent-foreground: 0 0% 93.3%;
+    --sidebar-border: 20 0% 15%;
+    --sidebar-ring: 180 100% 35.1%;
+    --radius: 0.75rem;
   }
 }
 
@@ -86,10 +86,11 @@ body {
   body {
     /* Apply background texture with gradient overlay */
     @apply bg-gradient-to-br from-background to-background/95 bg-fixed text-foreground;
-    background-image: 
-      radial-gradient(circle at 25% 25%, hsl(var(--accent)/5%) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, hsl(var(--accent)/5%) 0%, transparent 50%),
-      url('/images/background-texture.svg');
+    /* Ensure the SVG background is applied and visible */
+    background-image: url('/images/background-texture.svg');
+    background-size: cover; /* Or 'contain', 'auto', etc. based on desired effect */
+    background-position: center center;
+    background-repeat: no-repeat;
   }
 
   /* Enhance focus rings for accessibility and style */

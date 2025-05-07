@@ -2,10 +2,10 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { GridConfigurator } from '@/components/grid-configurator';
+// import { GridConfigurator } from '@/components/grid-configurator'; // Removed
 import { ButtonGrid } from '@/components/button-grid';
 import { StepIndicator } from '@/components/step-indicator';
-import { PlaybackControls } from '@/components/playback-controls'; // Ensure this path is correct now
+import { PlaybackControls } from '@/components/playback-controls';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 export type GridSize = `${number}x${number}`;
 
 export default function Home() {
-  const [gridSize, setGridSize] = useState<GridSize>('3x3');
+  const [gridSize] = useState<GridSize>('3x3'); // Hardcoded to 3x3, removed setGridSize
   const [sequence, setSequence] = useState<number[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [rows, setRows] = useState(3);
@@ -37,7 +37,7 @@ export default function Home() {
       clearInterval(playbackIntervalRef.current);
       playbackIntervalRef.current = null;
     }
-  }, [gridSize]);
+  }, [gridSize]); // gridSize is now constant, so this runs once on mount
 
    // Effect for handling playback
   useEffect(() => {
@@ -78,9 +78,7 @@ export default function Home() {
     };
   }, [isPlaying, sequence.length, playbackStep]); // Updated dependencies
 
-  const handleGridSizeChange = (newSize: GridSize) => {
-    setGridSize(newSize);
-  };
+  // Removed handleGridSizeChange
 
   const handleButtonClick = (index: number) => {
     if (isPlaying) return; // Prevent adding steps during playback
@@ -171,9 +169,9 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground" style={{backgroundImage: "url('/images/background-texture.svg')", backgroundSize: 'cover', backgroundPosition: 'center'}}>
       {/* Enhanced card with better visual effects */}
-      <Card className="w-full max-w-4xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.3)] rounded-xl border border-white/10 bg-gradient-to-br from-card via-card/95 to-card/90 backdrop-blur-sm overflow-hidden">
+      <Card className="w-full max-w-4xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.3)] rounded-xl border border-white/10 bg-gradient-to-br from-card/80 via-card/75 to-card/80 backdrop-blur-md overflow-hidden">
         {/* Header with subtle glow effect */}
         <CardHeader className="flex flex-col items-center space-y-5 pb-7 pt-8 border-b border-white/10 bg-gradient-to-b from-accent/5 to-transparent">
           {/* Animated title with glow effect */}
@@ -185,14 +183,11 @@ export default function Home() {
               GridRecall
             </CardTitle>
             <CardDescription className="text-center text-muted-foreground mt-3 text-base md:text-lg max-w-md mx-auto">
-              Memorize sequences visually. Click buttons to log steps, use controls to review.
+              Memorize sequences on a 3x3 grid. Click buttons to log steps, use controls to review.
             </CardDescription>
           </div>
           
-          {/* Grid Configurator with enhanced styling */}
-          <div className="pt-4 w-full max-w-xs">
-            <GridConfigurator gridSize={gridSize} onGridSizeChange={handleGridSizeChange} />
-          </div>
+          {/* Grid Configurator removed */}
         </CardHeader>
         
         <CardContent className="space-y-12 p-6 md:p-8 lg:p-10 relative">
