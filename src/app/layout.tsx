@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google'; // Use Inter font for better readability
+import { Inter } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/toaster'; // Import Toaster
+import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'GridRecall - Memory Game Assistant',
-  description: 'Assist in memorizing sequences for memory games.',
+  title: 'Follow the Bananas - GridRecall',
+  description: 'Train your memory by following the bananas! A fun sequence recall game.',
 };
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">{/* Apply dark theme by default */}
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
@@ -25,7 +25,7 @@ export default function RootLayout({
         )}
       >
         {children}
-        <Toaster />{/* Add Toaster for notifications */}
+        <Toaster />
       </body>
     </html>
   );

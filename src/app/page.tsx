@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import Image from 'next/image'; // Import next/image
+import Image from 'next/image';
 import { ButtonGrid } from '@/components/button-grid';
 import { StepIndicator } from '@/components/step-indicator';
 import { PlaybackControls } from '@/components/playback-controls';
@@ -52,7 +52,8 @@ export default function Home() {
               clearInterval(playbackIntervalRef.current);
               playbackIntervalRef.current = null;
             }
-            return prev;
+            setCurrentStep(sequence.length); // Ensure currentStep is at the end
+            return sequence.length; // Ensure playbackStep is also at the end
           }
         });
       }, 800); 
@@ -61,6 +62,7 @@ export default function Home() {
         clearInterval(playbackIntervalRef.current);
         playbackIntervalRef.current = null;
       }
+      // When not playing, currentStep should reflect playbackStep for manual navigation
       setCurrentStep(playbackStep);
     }
 
@@ -95,30 +97,21 @@ export default function Home() {
 
   const handlePreviousStep = () => {
     if (isPlaying) return; 
-    setCurrentStep((prevStep) => {
-      const newStep = Math.max(0, prevStep - 1);
-      setPlaybackStep(newStep); 
-      return newStep;
-    });
+    setPlaybackStep((prevStep) => Math.max(0, prevStep - 1));
   };
 
   const handleNextStep = () => {
     if (isPlaying) return; 
-    setCurrentStep((prevStep) => {
-      const newStep = Math.min(sequence.length, prevStep + 1);
-      setPlaybackStep(newStep); 
-      return newStep;
-    });
+     setPlaybackStep((prevStep) => Math.min(sequence.length, prevStep + 1));
   };
 
  const handlePlay = useCallback(() => {
     if (sequence.length === 0) return;
-    if (playbackStep >= sequence.length) {
+    if (playbackStep >= sequence.length) { // If at end, restart from beginning
       setPlaybackStep(0);
       setCurrentStep(0); 
-    } else {
-       setCurrentStep(playbackStep);
     }
+    // setCurrentStep(playbackStep); // Set current step to where playback begins
     setIsPlaying(true);
   }, [sequence.length, playbackStep]);
 
@@ -136,12 +129,12 @@ export default function Home() {
   if (!isClient) {
     return (
        <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground">
-         <Card className="w-full max-w-4xl shadow-2xl rounded-xl border-2 border-border/50 bg-gradient-to-br from-card to-card/90">
-           <CardHeader className="flex flex-col items-center space-y-4 pb-6 pt-8 border-b border-border/30">
+         <Card className="w-full max-w-4xl shadow-2xl rounded-xl border-2 border-border/50 bg-card">
+           <CardHeader className="flex flex-col items-center space-y-4 pb-6 pt-8 border-b border-border">
              <div className="text-center">
-                <CardTitle className="text-3xl md:text-4xl font-bold tracking-tight text-shadow-sm">GridRecall</CardTitle>
+                <CardTitle className="text-3xl md:text-4xl font-bold tracking-tight text-shadow-sm">Follow the Bananas</CardTitle>
                 <CardDescription className="text-center text-muted-foreground mt-2">
-                    Memorize sequences visually. Click buttons to log steps, use controls to review.
+                    Memorize sequences. Follow the bananas to victory!
                 </CardDescription>
              </div>
            </CardHeader>
@@ -155,25 +148,25 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground">
-      <Card className="w-full max-w-4xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.3)] rounded-xl border border-white/10 bg-gradient-to-br from-card/80 via-card/75 to-card/80 backdrop-blur-md overflow-hidden">
-        <CardHeader className="flex flex-col items-center space-y-5 pb-7 pt-8 border-b border-white/10 bg-gradient-to-b from-accent/5 to-transparent">
+      <Card className="w-full max-w-4xl shadow-xl rounded-xl border border-border bg-card overflow-hidden">
+        <CardHeader className="flex flex-col items-center space-y-5 pb-7 pt-8 border-b border-border">
           <div className="text-center relative">
-            <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-40 h-40 bg-accent/10 rounded-full blur-3xl -z-10"></div>
+            {/* Removed decorative blur divs */}
             
             <div className="mb-4 flex justify-center">
               <Image
-                src="/images/background-texture.svg" // Using the existing SVG as the logo source
-                alt="GridRecall Logo"
+                src="https://picsum.photos/80/80" 
+                alt="Follow the Bananas Logo"
                 width={80} 
                 height={80} 
-                className="rounded-full object-cover shadow-lg border-2 border-accent/30" 
-                data-ai-hint="logo abstract" 
-                priority // Preload logo if it's important for LCP
+                className="rounded-full object-cover shadow-lg border-2 border-primary/50" 
+                data-ai-hint="banana logo" 
+                priority
               />
             </div>
 
-            <CardTitle className="text-3xl md:text-5xl font-extrabold tracking-tight text-glow animate-pulse-slow bg-gradient-to-r from-accent/90 via-foreground to-accent/90 bg-clip-text text-transparent">
-              GridRecall
+            <CardTitle className="text-3xl md:text-5xl font-extrabold tracking-tight text-primary">
+              Follow the Bananas
             </CardTitle>
             <CardDescription className="text-center text-muted-foreground mt-3 text-base md:text-lg max-w-md mx-auto">
               Memorize sequences on a 3x3 grid. Click buttons to log steps, use controls to review.
@@ -182,10 +175,9 @@ export default function Home() {
         </CardHeader>
         
         <CardContent className="space-y-12 p-6 md:p-8 lg:p-10 relative">
-          <div className="absolute top-0 right-0 w-40 h-40 bg-accent/5 rounded-full blur-3xl -z-10"></div>
-          <div className="absolute bottom-0 left-0 w-40 h-40 bg-accent/5 rounded-full blur-3xl -z-10"></div>
+          {/* Removed decorative blur divs */}
           
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8 p-5 glass-effect rounded-xl inner-glow relative">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8 p-5 bg-background/30 rounded-xl border border-border relative">
             <div className="z-10">
               <Button 
                 onClick={handleReset} 
@@ -194,7 +186,7 @@ export default function Home() {
                 aria-label="Reset Sequence"
                 className="font-semibold shadow-lg hover:shadow-destructive/20 transition-all duration-300 rounded-full px-5 hover:-translate-y-1 hover:scale-105 active:scale-95"
               >
-                <RotateCcw className="h-5 w-5 mr-2 animate-spin-slow" /> Reset
+                <RotateCcw className="h-5 w-5 mr-2" /> Reset {/* Removed spin animation for simplicity */}
               </Button>
             </div>
 
@@ -231,10 +223,8 @@ export default function Home() {
             />
           </div>
           
-          <div className="mt-8 text-center text-sm text-muted-foreground glass-effect rounded-lg p-4 border border-white/10 shadow-lg relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-accent/5 opacity-30"></div>
-            <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-accent/30 to-transparent"></div>
-            
+          <div className="mt-8 text-center text-sm text-muted-foreground bg-background/30 rounded-lg p-4 border border-border shadow-lg relative overflow-hidden">
+            {/* Removed decorative gradient divs */}
             <p className="relative z-10 font-medium">
               Create a sequence by clicking buttons, then use playback controls to review your pattern.
             </p>
@@ -244,4 +234,3 @@ export default function Home() {
     </main>
   );
 }
-

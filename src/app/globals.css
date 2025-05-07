@@ -8,73 +8,74 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%; /* Adjusted for transparency, see .dark */
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 180 100% 25.1%; /* Teal Accent */
-    --accent-foreground: 0 0% 98%; /* Light text on Accent */
+    --background: 275 52% 37%; /* Deep Purple */
+    --foreground: 0 0% 100%; /* White */
+    --card: 275 52% 28%; /* Darker Purple for Card */
+    --card-foreground: 0 0% 100%; /* White */
+    --popover: 275 52% 20%; /* Even Darker Purple for Popover */
+    --popover-foreground: 0 0% 100%; /* White */
+    --primary: 51 97% 51%; /* Banana Yellow */
+    --primary-foreground: 240 10% 10%; /* Dark (near black) for text on yellow */
+    --secondary: 275 45% 45%; /* Lighter Muted Purple */
+    --secondary-foreground: 0 0% 100%; /* White */
+    --muted: 275 40% 55%; /* Very Light Purple */
+    --muted-foreground: 275 20% 85%; /* Light Purple/Gray for muted text */
+    --accent: 47 95% 46%; /* Darker Banana Yellow */
+    --accent-foreground: 240 10% 10%; /* Dark (near black) for text on accent */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 180 100% 35.1%; /* Slightly brighter Teal Ring */
+    --border: 275 50% 45%; /* Purple Border */
+    --input: 275 50% 42%; /* Purple Input Background */
+    --ring: 51 97% 55%; /* Brighter Banana Yellow Ring */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.75rem; /* Slightly larger radius for softer corners */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --radius: 0.75rem;
+    --sidebar-background: 275 52% 25%; /* Sidebar Purple */
+    --sidebar-foreground: 0 0% 95%; /* Light text for sidebar */
+    --sidebar-primary: 51 97% 51%; /* Banana Yellow for sidebar primary */
+    --sidebar-primary-foreground: 240 10% 10%;
+    --sidebar-accent: 275 50% 35%; /* Darker purple for sidebar accent */
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 275 50% 40%;
+    --sidebar-ring: 51 97% 55%;
   }
+
   .dark {
-    --background: 20 0% 13%; /* Dark Gray #333333 */
-    --foreground: 0 0% 93.3%; /* Light Gray #EEEEEE */
-    --card: 20 0% 13% / 0.8; /* Dark Gray #333333 with 80% opacity for card to show background */
-    --card-foreground: 0 0% 93.3%; /* Light Gray #EEEEEE for card text */
-    --popover: 20 0% 10%; /* Slightly darker popover */
-    --popover-foreground: 0 0% 93.3%;
-    --primary: 180 100% 25.1%; /* Teal Accent as primary */
-    --primary-foreground: 0 0% 98%; /* Light text on Accent */
-    --secondary: 0 0% 20%; /* Darker gray for secondary elements */
-    --secondary-foreground: 0 0% 93.3%;
-    --muted: 0 0% 25%; /* Muted gray */
-    --muted-foreground: 0 0% 60%; /* Muted foreground */
-    --accent: 180 100% 25.1%; /* Teal Accent #008080 */
-    --accent-foreground: 0 0% 98%; /* Light text on Accent */
-    --destructive: 0 70% 50%; /* Softer destructive red */
+    --background: 275 52% 37%;
+    --foreground: 0 0% 100%;
+    --card: 275 52% 28%; 
+    --card-foreground: 0 0% 100%;
+    --popover: 275 52% 20%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 51 97% 51%;
+    --primary-foreground: 240 10% 10%;
+    --secondary: 275 45% 45%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 275 40% 55%;
+    --muted-foreground: 275 20% 85%;
+    --accent: 47 95% 46%;
+    --accent-foreground: 240 10% 10%;
+    --destructive: 0 70% 50%; 
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 25%; /* Border color matching muted */
-    --input: 0 0% 20%; /* Input background matching secondary */
-    --ring: 180 100% 35.1%; /* Brighter Teal Ring for focus */
+    --border: 275 50% 45%;
+    --input: 275 50% 42%;
+    --ring: 51 97% 55%;
     --chart-1: 191 97% 77%;
     --chart-2: 271 91% 65%;
     --chart-3: 31 100% 65%;
     --chart-4: 338 85% 67%;
     --chart-5: 130 90% 65%;
-    --sidebar-background: 20 0% 10%;
-    --sidebar-foreground: 0 0% 93.3%;
-    --sidebar-primary: 180 100% 25.1%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 20 0% 15%;
-    --sidebar-accent-foreground: 0 0% 93.3%;
-    --sidebar-border: 20 0% 15%;
-    --sidebar-ring: 180 100% 35.1%;
+    --sidebar-background: 275 52% 25%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 51 97% 51%;
+    --sidebar-primary-foreground: 240 10% 10%;
+    --sidebar-accent: 275 50% 35%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 275 50% 40%;
+    --sidebar-ring: 51 97% 55%;
     --radius: 0.75rem;
   }
 }
@@ -84,63 +85,44 @@ body {
     @apply border-border;
   }
   body {
-    /* Apply background texture with gradient overlay */
-    @apply bg-gradient-to-br from-background to-background/95 bg-fixed text-foreground;
-    /* Ensure the SVG background is applied and visible */
-    background-image: url('/images/background-texture.svg');
-    background-size: cover; /* Or 'contain', 'auto', etc. based on desired effect */
-    background-position: center center;
-    background-repeat: no-repeat;
+    @apply bg-background text-foreground;
+    /* Removed background-image styling */
   }
 
-  /* Enhance focus rings for accessibility and style */
   *:focus-visible {
      @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
   
-  /* Improved heading styles */
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
   }
   
-  /* Improved link styles */
   a {
-    @apply text-accent hover:text-accent/80 transition-colors;
+    @apply text-primary hover:text-primary/80 transition-colors; /* Changed link to use primary (yellow) */
   }
 }
 
-/* Custom utilities for enhanced visual effects */
 @layer utilities {
-  /* Text effects */
   .text-shadow-sm {
     text-shadow: 0 1px 2px hsl(var(--foreground) / 0.1);
   }
-  .dark .text-shadow-sm {
+  .dark .text-shadow-sm { /* This will apply to our default dark theme */
     text-shadow: 0 1px 3px hsl(var(--background) / 0.3);
   }
   
-  .text-glow {
-    text-shadow: 0 0 5px hsl(var(--accent) / 0.5);
-  }
+  /* .text-glow class removed as it might not fit the new theme */
   
-  /* Card and element effects */
   .card-hover {
     @apply transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1;
   }
   
-  .glass-effect {
-    @apply bg-background/30 backdrop-blur-md border border-white/10;
-  }
-  
-  .inner-glow {
-    box-shadow: inset 0 0 20px hsl(var(--accent) / 0.15);
-  }
+  /* .glass-effect class removed */
+  /* .inner-glow class removed */
   
   .button-glow {
-    box-shadow: 0 0 15px hsl(var(--accent) / 0.4);
+    box-shadow: 0 0 15px hsl(var(--accent) / 0.4); /* Will now be a yellow glow */
   }
   
-  /* Animation utilities */
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
