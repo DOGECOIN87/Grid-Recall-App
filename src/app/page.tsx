@@ -111,7 +111,6 @@ export default function Home() {
       setPlaybackStep(0);
       setCurrentStep(0); 
     }
-    // setCurrentStep(playbackStep); // Set current step to where playback begins
     setIsPlaying(true);
   }, [sequence.length, playbackStep]);
 
@@ -131,6 +130,14 @@ export default function Home() {
        <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground">
          <Card className="w-full max-w-4xl shadow-2xl rounded-xl border-2 border-border/50 bg-card">
            <CardHeader className="flex flex-col items-center space-y-4 pb-6 pt-8 border-b border-border">
+              <Image
+                src="/logo.png"
+                alt="Follow the Bananas Logo"
+                width={100}
+                height={100}
+                className="rounded-full object-contain shadow-lg border-2 border-primary/50 mb-4"
+                priority
+              />
              <div className="text-center">
                 <CardTitle className="text-3xl md:text-4xl font-bold tracking-tight text-shadow-sm">Follow the Bananas</CardTitle>
                 <CardDescription className="text-center text-muted-foreground mt-2">
@@ -151,16 +158,13 @@ export default function Home() {
       <Card className="w-full max-w-4xl shadow-xl rounded-xl border border-border bg-card overflow-hidden">
         <CardHeader className="flex flex-col items-center space-y-5 pb-7 pt-8 border-b border-border">
           <div className="text-center relative">
-            {/* Removed decorative blur divs */}
-            
             <div className="mb-4 flex justify-center">
               <Image
-                src="https://picsum.photos/80/80" 
+                src="/logo.png"
                 alt="Follow the Bananas Logo"
-                width={80} 
-                height={80} 
-                className="rounded-full object-cover shadow-lg border-2 border-primary/50" 
-                data-ai-hint="banana logo" 
+                width={120} 
+                height={120} 
+                className="rounded-full object-contain shadow-lg border-2 border-primary/50" 
                 priority
               />
             </div>
@@ -175,7 +179,6 @@ export default function Home() {
         </CardHeader>
         
         <CardContent className="space-y-12 p-6 md:p-8 lg:p-10 relative">
-          {/* Removed decorative blur divs */}
           
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8 p-5 bg-background/30 rounded-xl border border-border relative">
             <div className="z-10">
@@ -186,7 +189,7 @@ export default function Home() {
                 aria-label="Reset Sequence"
                 className="font-semibold shadow-lg hover:shadow-destructive/20 transition-all duration-300 rounded-full px-5 hover:-translate-y-1 hover:scale-105 active:scale-95"
               >
-                <RotateCcw className="h-5 w-5 mr-2" /> Reset {/* Removed spin animation for simplicity */}
+                <RotateCcw className="h-5 w-5 mr-2" /> Reset
               </Button>
             </div>
 
@@ -224,7 +227,6 @@ export default function Home() {
           </div>
           
           <div className="mt-8 text-center text-sm text-muted-foreground bg-background/30 rounded-lg p-4 border border-border shadow-lg relative overflow-hidden">
-            {/* Removed decorative gradient divs */}
             <p className="relative z-10 font-medium">
               Create a sequence by clicking buttons, then use playback controls to review your pattern.
             </p>
