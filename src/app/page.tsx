@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-// import { GridConfigurator } from '@/components/grid-configurator'; // Removed
+import Image from 'next/image'; // Import next/image
 import { ButtonGrid } from '@/components/button-grid';
 import { StepIndicator } from '@/components/step-indicator';
 import { PlaybackControls } from '@/components/playback-controls';
@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 export type GridSize = `${number}x${number}`;
 
 export default function Home() {
-  const [gridSize] = useState<GridSize>('3x3'); // Hardcoded to 3x3, removed setGridSize
+  const [gridSize] = useState<GridSize>('3x3');
   const [sequence, setSequence] = useState<number[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [rows, setRows] = useState(3);
@@ -24,7 +24,6 @@ export default function Home() {
   const playbackIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Set client flag after hydration
     setIsClient(true);
     const [r, c] = gridSize.split('x').map(Number);
     setRows(r);
@@ -37,55 +36,46 @@ export default function Home() {
       clearInterval(playbackIntervalRef.current);
       playbackIntervalRef.current = null;
     }
-  }, [gridSize]); // gridSize is now constant, so this runs once on mount
+  }, [gridSize]);
 
-   // Effect for handling playback
   useEffect(() => {
     if (isPlaying) {
       playbackIntervalRef.current = setInterval(() => {
         setPlaybackStep((prev) => {
           const nextStep = prev + 1;
           if (nextStep <= sequence.length) {
-             // Sync currentStep with playbackStep during playback
              setCurrentStep(nextStep);
             return nextStep;
           } else {
-            // Stop playback when sequence ends
             setIsPlaying(false);
             if (playbackIntervalRef.current) {
               clearInterval(playbackIntervalRef.current);
               playbackIntervalRef.current = null;
             }
-            // Keep at the end after finishing playback
             return prev;
           }
         });
-      }, 800); // Adjust speed as needed (e.g., 800ms per step)
+      }, 800); 
     } else {
       if (playbackIntervalRef.current) {
         clearInterval(playbackIntervalRef.current);
         playbackIntervalRef.current = null;
       }
-      // When stopping or pausing, update the manual step indicator
       setCurrentStep(playbackStep);
     }
 
-    // Cleanup interval on component unmount or when isPlaying changes
     return () => {
       if (playbackIntervalRef.current) {
         clearInterval(playbackIntervalRef.current);
       }
     };
-  }, [isPlaying, sequence.length, playbackStep]); // Updated dependencies
-
-  // Removed handleGridSizeChange
+  }, [isPlaying, sequence.length, playbackStep]);
 
   const handleButtonClick = (index: number) => {
-    if (isPlaying) return; // Prevent adding steps during playback
+    if (isPlaying) return; 
     setSequence((prevSequence) => {
       const newSequence = [...prevSequence, index];
       setCurrentStep(newSequence.length);
-      // Also update playbackStep when manually adding, so playback can start from the end
       setPlaybackStep(newSequence.length);
       return newSequence;
     });
@@ -104,19 +94,19 @@ export default function Home() {
   };
 
   const handlePreviousStep = () => {
-    if (isPlaying) return; // Prevent manual control during playback
+    if (isPlaying) return; 
     setCurrentStep((prevStep) => {
       const newStep = Math.max(0, prevStep - 1);
-      setPlaybackStep(newStep); // Sync playback step
+      setPlaybackStep(newStep); 
       return newStep;
     });
   };
 
   const handleNextStep = () => {
-    if (isPlaying) return; // Prevent manual control during playback
+    if (isPlaying) return; 
     setCurrentStep((prevStep) => {
       const newStep = Math.min(sequence.length, prevStep + 1);
-      setPlaybackStep(newStep); // Sync playback step
+      setPlaybackStep(newStep); 
       return newStep;
     });
   };
@@ -124,12 +114,9 @@ export default function Home() {
  const handlePlay = useCallback(() => {
     if (sequence.length === 0) return;
     if (playbackStep >= sequence.length) {
-      // If at the end, restart from the beginning
       setPlaybackStep(0);
-      setCurrentStep(0); // Reset manual step indicator as well
+      setCurrentStep(0); 
     } else {
-       // Otherwise, ensure playback starts from the current playbackStep
-       // No change needed to playbackStep here, just ensure currentStep matches
        setCurrentStep(playbackStep);
     }
     setIsPlaying(true);
@@ -137,18 +124,16 @@ export default function Home() {
 
   const handlePause = useCallback(() => {
     setIsPlaying(false);
-    // currentStep will be updated by the useEffect when isPlaying becomes false
   }, []);
 
   const handleStop = useCallback(() => {
     setIsPlaying(false);
-    setPlaybackStep(0); // Reset playback to the beginning
-    setCurrentStep(0);   // Reset manual step indicator
+    setPlaybackStep(0); 
+    setCurrentStep(0);   
   }, []);
 
 
   if (!isClient) {
-    // Render placeholder or null during SSR/prerender
     return (
        <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground">
          <Card className="w-full max-w-4xl shadow-2xl rounded-xl border-2 border-border/50 bg-gradient-to-br from-card to-card/90">
@@ -160,7 +145,7 @@ export default function Home() {
                 </CardDescription>
              </div>
            </CardHeader>
-           <CardContent className="flex flex-col items-center justify-center space-y-12 py-10"> {/* Increased space-y */}
+           <CardContent className="flex flex-col items-center justify-center space-y-12 py-10">
              <div className="text-muted-foreground animate-pulse text-lg">Loading Interface...</div>
            </CardContent>
          </Card>
@@ -169,16 +154,24 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground" style={{backgroundImage: "url('/images/background-texture.svg')", backgroundSize: 'cover', backgroundPosition: 'center'}}>
-      {/* Enhanced card with better visual effects */}
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground">
       <Card className="w-full max-w-4xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.3)] rounded-xl border border-white/10 bg-gradient-to-br from-card/80 via-card/75 to-card/80 backdrop-blur-md overflow-hidden">
-        {/* Header with subtle glow effect */}
         <CardHeader className="flex flex-col items-center space-y-5 pb-7 pt-8 border-b border-white/10 bg-gradient-to-b from-accent/5 to-transparent">
-          {/* Animated title with glow effect */}
           <div className="text-center relative">
-            {/* Decorative elements */}
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-40 h-40 bg-accent/10 rounded-full blur-3xl -z-10"></div>
             
+            <div className="mb-4 flex justify-center">
+              <Image
+                src="/images/background-texture.svg" // Using the existing SVG as the logo source
+                alt="GridRecall Logo"
+                width={80} 
+                height={80} 
+                className="rounded-full object-cover shadow-lg border-2 border-accent/30" 
+                data-ai-hint="logo abstract" 
+                priority // Preload logo if it's important for LCP
+              />
+            </div>
+
             <CardTitle className="text-3xl md:text-5xl font-extrabold tracking-tight text-glow animate-pulse-slow bg-gradient-to-r from-accent/90 via-foreground to-accent/90 bg-clip-text text-transparent">
               GridRecall
             </CardTitle>
@@ -186,18 +179,13 @@ export default function Home() {
               Memorize sequences on a 3x3 grid. Click buttons to log steps, use controls to review.
             </CardDescription>
           </div>
-          
-          {/* Grid Configurator removed */}
         </CardHeader>
         
         <CardContent className="space-y-12 p-6 md:p-8 lg:p-10 relative">
-          {/* Decorative accent elements */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-accent/5 rounded-full blur-3xl -z-10"></div>
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-accent/5 rounded-full blur-3xl -z-10"></div>
           
-          {/* Enhanced Control Bar */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8 p-5 glass-effect rounded-xl inner-glow relative">
-            {/* Left Aligned Reset Button with enhanced styling */}
             <div className="z-10">
               <Button 
                 onClick={handleReset} 
@@ -210,7 +198,6 @@ export default function Home() {
               </Button>
             </div>
 
-            {/* Centered Step Indicator */}
             <div className="flex-grow flex items-center justify-center z-10">
               <StepIndicator
                 currentStep={currentStep}
@@ -222,7 +209,6 @@ export default function Home() {
               />
             </div>
 
-            {/* Right Aligned Playback Controls */}
             <div className="z-10">
               <PlaybackControls
                 isPlaying={isPlaying}
@@ -234,7 +220,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Button Grid with animation */}
           <div className="flex justify-center animate-float">
             <ButtonGrid
               rows={rows}
@@ -246,9 +231,7 @@ export default function Home() {
             />
           </div>
           
-          {/* Enhanced instruction panel */}
           <div className="mt-8 text-center text-sm text-muted-foreground glass-effect rounded-lg p-4 border border-white/10 shadow-lg relative overflow-hidden">
-            {/* Decorative accent */}
             <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-accent/5 opacity-30"></div>
             <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-accent/30 to-transparent"></div>
             
@@ -261,3 +244,4 @@ export default function Home() {
     </main>
   );
 }
+
