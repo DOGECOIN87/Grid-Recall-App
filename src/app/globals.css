@@ -86,7 +86,6 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    /* Removed background-image styling */
   }
 
   *:focus-visible {
@@ -106,18 +105,13 @@ body {
   .text-shadow-sm {
     text-shadow: 0 1px 2px hsl(var(--foreground) / 0.1);
   }
-  .dark .text-shadow-sm { /* This will apply to our default dark theme */
+  .dark .text-shadow-sm { 
     text-shadow: 0 1px 3px hsl(var(--background) / 0.3);
   }
-  
-  /* .text-glow class removed as it might not fit the new theme */
   
   .card-hover {
     @apply transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1;
   }
-  
-  /* .glass-effect class removed */
-  /* .inner-glow class removed */
   
   .button-glow {
     box-shadow: 0 0 15px hsl(var(--accent) / 0.4); /* Will now be a yellow glow */

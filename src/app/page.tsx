@@ -10,14 +10,11 @@ import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
-export type GridSize = `${number}x${number}`;
-
 export default function Home() {
-  const [gridSize] = useState<GridSize>('3x3');
   const [sequence, setSequence] = useState<number[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [rows, setRows] = useState(3);
-  const [cols, setCols] = useState(3);
+  const [rows] = useState(3); // Default to 3x3 grid
+  const [cols] = useState(3); // Default to 3x3 grid
   const [isClient, setIsClient] = useState(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [playbackStep, setPlaybackStep] = useState<number>(0);
@@ -25,9 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     setIsClient(true);
-    const [r, c] = gridSize.split('x').map(Number);
-    setRows(r);
-    setCols(c);
+    // Initialize or reset based on fixed 3x3 grid
     setSequence([]);
     setCurrentStep(0);
     setIsPlaying(false);
@@ -36,7 +31,7 @@ export default function Home() {
       clearInterval(playbackIntervalRef.current);
       playbackIntervalRef.current = null;
     }
-  }, [gridSize]);
+  }, []); // Runs once on mount
 
   useEffect(() => {
     if (isPlaying) {
@@ -52,8 +47,8 @@ export default function Home() {
               clearInterval(playbackIntervalRef.current);
               playbackIntervalRef.current = null;
             }
-            setCurrentStep(sequence.length); // Ensure currentStep is at the end
-            return sequence.length; // Ensure playbackStep is also at the end
+            setCurrentStep(sequence.length); 
+            return sequence.length; 
           }
         });
       }, 800); 
@@ -62,7 +57,6 @@ export default function Home() {
         clearInterval(playbackIntervalRef.current);
         playbackIntervalRef.current = null;
       }
-      // When not playing, currentStep should reflect playbackStep for manual navigation
       setCurrentStep(playbackStep);
     }
 
@@ -82,7 +76,6 @@ export default function Home() {
       return newSequence;
     });
   };
-
 
   const handleReset = () => {
     setSequence([]);
@@ -107,7 +100,7 @@ export default function Home() {
 
  const handlePlay = useCallback(() => {
     if (sequence.length === 0) return;
-    if (playbackStep >= sequence.length) { // If at end, restart from beginning
+    if (playbackStep >= sequence.length) { 
       setPlaybackStep(0);
       setCurrentStep(0); 
     }
@@ -131,15 +124,15 @@ export default function Home() {
          <Card className="w-full max-w-4xl shadow-2xl rounded-xl border-2 border-border/50 bg-card">
            <CardHeader className="flex flex-col items-center space-y-4 pb-6 pt-8 border-b border-border">
               <Image
-                src="/logo.png"
+                src="/logo.png" 
                 alt="Follow the Bananas Logo"
-                width={100}
-                height={100}
+                width={120} 
+                height={120}
                 className="rounded-full object-contain shadow-lg border-2 border-primary/50 mb-4"
                 priority
               />
              <div className="text-center">
-                <CardTitle className="text-3xl md:text-4xl font-bold tracking-tight text-shadow-sm">Follow the Bananas</CardTitle>
+                <CardTitle className="text-3xl md:text-4xl font-bold tracking-tight text-primary">Follow the Bananas</CardTitle>
                 <CardDescription className="text-center text-muted-foreground mt-2">
                     Memorize sequences. Follow the bananas to victory!
                 </CardDescription>
@@ -160,21 +153,14 @@ export default function Home() {
           <div className="text-center relative">
             <div className="mb-4 flex justify-center">
               <Image
-                src="/logo.png"
+                src="/logo.png" 
                 alt="Follow the Bananas Logo"
-                width={120} 
-                height={120} 
-                className="rounded-full object-contain shadow-lg border-2 border-primary/50" 
+                width={150} 
+                height={150} 
+                className="object-contain" 
                 priority
               />
             </div>
-
-            <CardTitle className="text-3xl md:text-5xl font-extrabold tracking-tight text-primary">
-              Follow the Bananas
-            </CardTitle>
-            <CardDescription className="text-center text-muted-foreground mt-3 text-base md:text-lg max-w-md mx-auto">
-              Memorize sequences on a 3x3 grid. Click buttons to log steps, use controls to review.
-            </CardDescription>
           </div>
         </CardHeader>
         
@@ -228,7 +214,7 @@ export default function Home() {
           
           <div className="mt-8 text-center text-sm text-muted-foreground bg-background/30 rounded-lg p-4 border border-border shadow-lg relative overflow-hidden">
             <p className="relative z-10 font-medium">
-              Create a sequence by clicking buttons, then use playback controls to review your pattern.
+              Create a sequence by clicking buttons, then use playback controls to review your pattern. Follow the bananas!
             </p>
           </div>
         </CardContent>
