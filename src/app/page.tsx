@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { ButtonGrid } from '@/components/button-grid';
 import { StepIndicator } from '@/components/step-indicator';
-import { PlaybackControls } from '@/components/playback-controls';
+import { PlaybackControls } from '@/components/playback-controls'; 
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -57,6 +57,7 @@ export default function Home() {
         clearInterval(playbackIntervalRef.current);
         playbackIntervalRef.current = null;
       }
+      // When not playing, currentStep should reflect the playbackStep for manual navigation
       setCurrentStep(playbackStep);
     }
 
@@ -65,14 +66,14 @@ export default function Home() {
         clearInterval(playbackIntervalRef.current);
       }
     };
-  }, [isPlaying, sequence.length, playbackStep]);
+  }, [isPlaying, sequence.length, playbackStep]); // Dependency on playbackStep added
 
   const handleButtonClick = (index: number) => {
     if (isPlaying) return; 
     setSequence((prevSequence) => {
       const newSequence = [...prevSequence, index];
       setCurrentStep(newSequence.length);
-      setPlaybackStep(newSequence.length);
+      setPlaybackStep(newSequence.length); // Ensure playbackStep is also updated
       return newSequence;
     });
   };
@@ -90,17 +91,26 @@ export default function Home() {
 
   const handlePreviousStep = () => {
     if (isPlaying) return; 
-    setPlaybackStep((prevStep) => Math.max(0, prevStep - 1));
+    setPlaybackStep((prevStep) => {
+      const newStep = Math.max(0, prevStep - 1);
+      setCurrentStep(newStep); // Update currentStep for display
+      return newStep;
+    });
   };
 
   const handleNextStep = () => {
     if (isPlaying) return; 
-     setPlaybackStep((prevStep) => Math.min(sequence.length, prevStep + 1));
+     setPlaybackStep((prevStep) => {
+      const newStep = Math.min(sequence.length, prevStep + 1);
+      setCurrentStep(newStep); // Update currentStep for display
+      return newStep;
+    });
   };
 
  const handlePlay = useCallback(() => {
     if (sequence.length === 0) return;
-    if (playbackStep >= sequence.length) { 
+    if (playbackStep >= sequence.length && sequence.length > 0) { 
+      // If at the end of sequence, restart playback from the beginning
       setPlaybackStep(0);
       setCurrentStep(0); 
     }
@@ -130,6 +140,7 @@ export default function Home() {
                 height={120}
                 className="rounded-full object-contain shadow-lg border-2 border-primary/50 mb-4"
                 priority
+                data-ai-hint="banana logo"
               />
              <div className="text-center">
                 <CardTitle className="text-3xl md:text-4xl font-bold tracking-tight text-primary">Follow the Bananas</CardTitle>
@@ -151,7 +162,7 @@ export default function Home() {
       <Card className="w-full max-w-4xl shadow-xl rounded-xl border border-border bg-card overflow-hidden">
         <CardHeader className="flex flex-col items-center space-y-5 pb-7 pt-8 border-b border-border">
           <div className="text-center relative">
-            <div className="mb-4 flex justify-center">
+            <div className="mb-4 flex justify-center" data-testid="app-logo-container">
               <Image
                 src="/logo.png" 
                 alt="Follow the Bananas Logo"
@@ -159,14 +170,19 @@ export default function Home() {
                 height={150} 
                 className="object-contain" 
                 priority
+                data-ai-hint="banana logo"
               />
             </div>
+             <CardTitle className="text-4xl md:text-5xl font-extrabold tracking-tighter text-primary text-shadow-sm">Follow the Bananas</CardTitle>
+            <CardDescription className="text-lg text-center text-muted-foreground mt-2 max-w-md">
+                A fun sequence recall game. Click the buttons, memorize the pattern, and follow the bananas to sharpen your mind!
+            </CardDescription>
           </div>
         </CardHeader>
         
-        <CardContent className="space-y-12 p-6 md:p-8 lg:p-10 relative">
+        <CardContent className="space-y-10 p-6 md:p-8 lg:p-10 relative">
           
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8 p-5 bg-background/30 rounded-xl border border-border relative">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-8 p-4 bg-background/30 rounded-xl border border-border shadow-lg">
             <div className="z-10">
               <Button 
                 onClick={handleReset} 
@@ -181,7 +197,7 @@ export default function Home() {
 
             <div className="flex-grow flex items-center justify-center z-10">
               <StepIndicator
-                currentStep={currentStep}
+                currentStep={currentStep} // Ensure this reflects the step being shown
                 totalSteps={sequence.length}
                 onPrevious={handlePreviousStep}
                 onNext={handleNextStep}
@@ -206,7 +222,7 @@ export default function Home() {
               rows={rows}
               cols={cols}
               sequence={sequence}
-              currentStep={currentStep}
+              currentStep={currentStep} // This should be the step currently highlighted/shown
               onButtonClick={handleButtonClick}
               disabled={isPlaying}
             />
@@ -222,3 +238,4 @@ export default function Home() {
     </main>
   );
 }
+
