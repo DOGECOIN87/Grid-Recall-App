@@ -8,7 +8,10 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  output: 'export',
+  // Needed for static export with images
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

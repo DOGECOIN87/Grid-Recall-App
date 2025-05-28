@@ -10,7 +10,54 @@ import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
+// Splash Screen Component
+const SplashScreen = ({ onEnter }: { onEnter: () => void }) => {
+  const [opacity, setOpacity] = useState(0);
+  
+  useEffect(() => {
+    // Start fade-in animation after component mounts
+    const timer = setTimeout(() => {
+      setOpacity(1);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  return (
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-black z-50" style={{ transition: 'opacity 0.5s ease-in-out' }}>
+      <div 
+        className="flex flex-col items-center justify-center space-y-8"
+        style={{ 
+          opacity: opacity, 
+          transition: 'opacity 2s ease-in-out'
+        }}
+      >
+        <Image
+          src="/logo2.png"
+          alt="Follow the Bananas Logo"
+          width={250}
+          height={250}
+          className="object-contain"
+          priority
+        />
+        
+        <Button 
+          onClick={onEnter}
+          className="mt-8 bg-[#FFD700] hover:bg-[#FFCC00] text-black font-bold py-3 px-8 rounded-full text-xl tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-lg"
+          style={{ 
+            opacity: opacity, 
+            transition: 'opacity 2.5s ease-in-out, transform 0.3s ease, box-shadow 0.3s ease'
+          }}
+        >
+          ENTER
+        </Button>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
+  const [showSplash, setShowSplash] = useState(true);
   const [sequence, setSequence] = useState<number[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [rows] = useState(3); // Default to 3x3 grid
@@ -19,6 +66,10 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [playbackStep, setPlaybackStep] = useState<number>(0);
   const playbackIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  const handleEnter = () => {
+    setShowSplash(false);
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -128,6 +179,10 @@ export default function Home() {
   }, []);
 
 
+  if (showSplash) {
+    return <SplashScreen onEnter={handleEnter} />;
+  }
+  
   if (!isClient) {
     return (
        <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-background text-foreground">
