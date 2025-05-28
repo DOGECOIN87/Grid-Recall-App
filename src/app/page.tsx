@@ -134,7 +134,7 @@ export default function Home() {
          <Card className="w-full max-w-4xl shadow-2xl rounded-xl border-2 border-border/50 bg-card">
            <CardHeader className="flex flex-col items-center space-y-4 pb-6 pt-8 border-b border-border">
               <Image
-                src="/logo.png" 
+                src="/logo2.png" 
                 alt="Follow the Bananas Logo"
                 width={120} 
                 height={120}
@@ -164,7 +164,7 @@ export default function Home() {
           <div className="text-center relative">
             <div className="mb-4 flex justify-center" data-testid="app-logo-container">
               <Image
-                src="/logo.png" 
+                src="/logo2.png" 
                 alt="Follow the Bananas Logo"
                 width={150} 
                 height={150} 
@@ -238,4 +238,3 @@ export default function Home() {
     </main>
   );
 }
-
